@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: LAA Benefit Checker 2.0
+
+
+# used by actuator info endpoint
+info:
+  app:
+    name: LAA Benefit Checker 2.0 application
+    description: A service that provides a REST API to determine if a person is on benefits or not.
+    version: 1.0.0
+
+management:
+  # specify actuator endpoints to enable
+  endpoints:
+    web:
+      exposure:
+        include: health

@@ -19,8 +19,8 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'laa-spring-boot-microservice-template'
+rootProject.name = 'laa-dwp-benefit-checker-2.0'
 
-include 'spring-boot-microservice-api'
-include 'spring-boot-microservice-service'
+include 'bc-api'
+include 'bc-service'
 
