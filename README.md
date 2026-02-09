@@ -12,14 +12,6 @@ Includes the following subprojects:
 - `bc-api` - OpenAPI specification used for generating API stub interfaces and documentation.
 - `bc-service` - REST API service.
 
-### Add Repository To Snyk
-Ensure that your repository has been added to the [Legal Aid Agency Snyk](https://app.snyk.io/org/legal-aid-agency) organisation.
-
-Also add `SNYK_TOKEN` as a repository secret.
-
-### Database scripts
-The *.sql scripts in  `src/main/resources` have been included to provide an example database for demonstration purposes only and should be removed for your application.
-
 ## Build And Run Application
 
 ### Build application
