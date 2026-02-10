@@ -1,0 +1,15 @@
+replicas: 1
+metrics:
+  mainReleaseName: development
+ingress:
+  externalRoute:
+    enabled: true
+  whitelist:
+    includeCpLiveCluster: true
+    includeProdAwsWorkspace: true
+    includeLondonProdNatGatewayWorkspaces: true
+    includePrismaAccess: true
+  className: modsec-non-prod
+
+grafana:
+  enabled: false  # Disable in development to save resources
