@@ -1,0 +1,66 @@
+metrics:
+  mainReleaseName: production
+
+global:
+  clusterDomain: apps.live.cloud-platform.service.justice.gov.uk
+
+  image:
+    repository: ""
+
+  ports:
+    protocol: TCP
+    port: 80
+    targetPort: 8082
+
+  management:
+    enabled: true
+    protocol: TCP
+    port: 8081
+    targetPort: 8081
+
+  ingress:
+    externalRoute:
+      mojDigitalVpnRequired: false
+    enabled: true
+    className: modsec
+
+env:
+  - name: DWP_API_URL
+    valueFrom:
+      secretKeyRef:
+        name: laa-dwp-benefit-checker-secrets
+        key: DWP_API_URL
+
+extraEnvVars:
+  - name: ALLOWED_HOSTS
+    value: '{{ .Release.Name }}-{{ .Chart.Name }}-{{ .Release.Namespace }}.{{ .Values.global.clusterDomain }}'
+  - name: CANONICAL_BASE_URL
+    value: 'https://{{ .Release.Name }}-{{ .Chart.Name }}-{{ .Release.Namespace }}.{{ .Values.global.clusterDomain }}'
+
+securityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsGroup: 1000
+
+ingress:
+  externalRoute:
+    enabled: true
+    hostname:
+      enabled: false
+
+probe:
+  enabled: true
+
+resources:
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: 25m
+    memory: 384Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 8
+  targetCPUUtilizationPercentage: 60
