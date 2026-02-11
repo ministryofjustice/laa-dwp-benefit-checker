@@ -12,7 +12,6 @@ For the main branch, extract DB environment variables from rds-postgresql-instan
 */}}
 
 {{- end }}
-{{- end }}
 
 {{/*
   Define Sentry environment variables
