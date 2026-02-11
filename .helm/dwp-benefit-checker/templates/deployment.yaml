@@ -54,9 +54,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            {{ include "dbConnectionDetails" . | nindent 12 }}
-            - name: DB_URL
-              value: "jdbc:postgresql://$(DB_HOST):5432/$(DB_NAME)"
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.spring.profile | quote }}
             - name: AWS_REGION

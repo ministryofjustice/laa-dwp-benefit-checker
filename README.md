@@ -62,3 +62,9 @@ The following actuator endpoints have been configured:
 - [H2](https://www.h2database.com/html/main.html) - used to provide an example database and should not be used in production.
 
 
+## Helm
+- To check values will be replaced properly in chart
+helm template ./.helm/dwp-benefit-checker/. -f ./.helm/dwp-benefit-checker/values/development.yaml
+- To lint the files so formatting is good
+helm lint .helm/dwp-benefit-checker/ --values .helm/dwp-benefit-checker/values/development.yaml
+
