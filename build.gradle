@@ -1,3 +1,11 @@
 subprojects {
     group = 'uk.gov.justice.laa.bc'
 }
+
+allprojects {
+    repositories {
+        maven { url = "https://build.shibboleth.net/maven/releases/" }
+    }
+}
+
+
