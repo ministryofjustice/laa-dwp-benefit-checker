@@ -1,77 +1,27 @@
 openapi: "3.0.0"
 info:
   version: 1.0.0
-  title: Items API
+  title: Benefit Checker API
 paths:
-  /api/v1/items:
-    get:
-      tags:
-        - items
-      summary: Get items
-      operationId: getItems
-      responses:
-        '200':
-          description: 'Success'
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Items"
-        '400':
-          description: 'Bad request'
-        '401':
-          description: 'Unauthorized'
-        '403':
-          description: 'Forbidden'
-        '404':
-          description: 'Not found'
-        '500':
-          description: 'Internal server error'
+  /api/v1/benefitsCheck:
     post:
       tags:
-        - items
-      summary: Create an item
-      operationId: createItem
+        - benefitsChecker
+      summary: Perform a benefits check
+      operationId: benefitCheck
       requestBody:
-        description: create an item
+        description: perform a benefits check
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ItemRequestBody'
+              $ref: '#/components/schemas/BenefitCheckRequestBody'
       responses:
         '201':
           description: 'Created'
-        '400':
-          description: 'Bad request'
-        '401':
-          description: 'Unauthorized'
-        '403':
-          description: 'Forbidden'
-        '404':
-          description: 'Not found'
-        '500':
-          description: 'Internal server error'
-
-  /api/v1/items/{id}:
-    get:
-      summary: Get item by id
-      operationId: getItemById
-      tags:
-        - items
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the item to retrieve
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Item"
+                $ref: '#/components/schemas/BenefitCheckResponseBody'
         '400':
           description: 'Bad request'
         '401':
@@ -82,91 +32,47 @@ paths:
           description: 'Not found'
         '500':
           description: 'Internal server error'
-    put:
-      tags:
-        - items
-      summary: Update an item
-      operationId: updateItem
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the item to be updated
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: update an existing item
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ItemRequestBody'
-      responses:
-        '204':
-          description: No content
-        '400':
-          description: 'Bad request'
-        '401':
-          description: 'Unauthorized'
-        '403':
-          description: 'Forbidden'
-        '404':
-          description: 'Not found'
-        '500':
-          description: 'Internal server error'
-    delete:
-      summary: Delete item by id
-      operationId: deleteItem
-      tags:
-        - items
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the item to be deleted
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '204':
-          description: No content
-        '400':
-          description: 'Bad request'
-        '401':
-          description: 'Unauthorized'
-        '403':
-          description: 'Forbidden'
-        '404':
-          description: 'Not found'
-        '500':
-          description: 'Internal server error'
-
 components:
   schemas:
-    Item:
+    BenefitCheckRequestBody:
       required:
-        - id
-        - name
-        - description
+        - clientReference
+        - nino
+        - surname
+        - dateOfBirth
+        - dateOfAward
+        - lscServiceName
+        - clientOrgId
+        - clientUserId
       properties:
-        id:
-          type: integer
-          format: int64
-        name:
+        clientReference:
           type: string
-        description:
+        nino:
           type: string
-    ItemRequestBody:
+        surname:
+          type: string
+        dateOfBirth:
+          type: string
+          example: 19720110
+        dateOfAward:
+          type: string
+          example: 20260205
+        lscServiceName:
+          type: string
+        clientOrgId:
+          type: string
+        clientUserId:
+          type: string
+    BenefitCheckResponseBody:
       required:
-        - name
-        - description
+        - originalClientRef
+        - benefitCheckerStatus
+        - confirmationRef
       properties:
-        name:
+        originalClientRef:
           type: string
-        description:
+        benefitCheckerStatus:
           type: string
-
-    Items:
-      type: array
-      items:
-        $ref: "#/components/schemas/Item"
+          example: Yes or No
+        confirmationRef:
+          type: string

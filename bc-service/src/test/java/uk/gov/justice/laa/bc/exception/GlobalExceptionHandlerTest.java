@@ -15,23 +15,6 @@ class GlobalExceptionHandlerTest {
   GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
 
   @Test
-  void handleItemNotFound_returnsNotFoundStatusAndErrorMessage() throws Exception {
-    MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/items/99");
-    ResponseEntity<Object> result =
-        globalExceptionHandler.handleItemNotFound(
-            new ItemNotFoundException("Item not found"),
-            new ServletWebRequest(request));
-
-    assertThat(result).isNotNull();
-    assertThat(result.getStatusCode()).isEqualTo(NOT_FOUND);
-    assertThat(result.getBody()).isInstanceOf(ProblemDetail.class);
-    ProblemDetail body = (ProblemDetail) result.getBody();
-    assertThat(body.getDetail()).isEqualTo("Item not found");
-    assertThat(body.getInstance()).hasToString("/api/v1/items/99");
-    assertThat(body.getType()).hasToString("about:blank");
-  }
-
-  @Test
   void handleGenericException_returnsInternalServerErrorStatusAndErrorMessage() throws Exception {
     ResponseEntity<String> result = globalExceptionHandler.handleGenericException(new RuntimeException("Something went wrong"));
 

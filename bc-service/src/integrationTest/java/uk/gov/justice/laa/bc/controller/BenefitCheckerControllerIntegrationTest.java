@@ -21,7 +21,7 @@ import uk.gov.justice.laa.bc.BenefitCheckerApplication;
 @SpringBootTest(classes = BenefitCheckerApplication.class)
 @AutoConfigureMockMvc
 @Transactional
-public class ItemControllerIntegrationTest {
+public class BenefitCheckerControllerIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
