@@ -34,6 +34,10 @@ The *.sql scripts in  `src/main/resources` have been included to provide an exam
 ### Run application via Docker
 `docker compose up`
 
+## Code Coverage
+./gradlew jacocoTestReport
+./gradlew jacocoTestCoverageVerification
+
 ## Application Endpoints
 
 ### API Documentation

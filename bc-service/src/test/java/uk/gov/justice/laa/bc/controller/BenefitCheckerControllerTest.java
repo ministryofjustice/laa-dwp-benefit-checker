@@ -29,7 +29,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
 import uk.gov.justice.laa.bc.service.BenefitCheckerService;
