@@ -2,6 +2,8 @@ package uk.gov.justice.laa.bc.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
@@ -17,13 +19,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
+import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
 import uk.gov.justice.laa.bc.service.BenefitCheckerService;
 
 @WebMvcTest(BenefitCheckerController.class)
@@ -35,34 +43,64 @@ class BenefitCheckerControllerTest {
   @MockitoBean
   private BenefitCheckerService mockBenefitCheckerService;
 
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
-  void performCheck_returnsCreatedStatusAndLocationHeader() throws Exception {
-    /*BenefitCheckRequestBody itemRequestBody = BenefitCheckRequestBody.builder().build();
-    when(mockBenefitCheckerService.performCheck(itemRequestBody))
-        .thenReturn("ACK");
+  void performCheck_returnsCreatedStatus() throws Exception {
 
-    mockMvc
-        .perform(post("/api/v1/items")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"name\": \"Item Three\", \"description\": \"This is an updated item three.\"}")
-            .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated())
-        .andExpect(header().string("Location", containsString("/api/v1/items/3")));*/
+    BenefitCheckRequestBody request =
+            BenefitCheckRequestBody.builder()
+                    .clientReference("clientReference")
+                    .nino("nino")
+                    .dateOfAward("211226")
+                    .dateOfBirth("171226")
+                    .clientUserId("user")
+                    .clientOrgId("org")
+                    .lscServiceName("a")
+                    .surname("smith")
+                    .build();
+
+    BenefitCheckResponseBody expectedResponse = BenefitCheckResponseBody.builder()
+            .benefitCheckerStatus("Ok")
+            .build();
+
+    when(mockBenefitCheckerService.performCheck(request))
+        .thenReturn(expectedResponse);
+
+    MvcResult result = mockMvc
+            .perform(post("/api/v1/benefitsCheck")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(request))
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String json = result.getResponse().getContentAsString();
+    BenefitCheckResponseBody responseBody = objectMapper.readValue(json, BenefitCheckResponseBody.class);
+
+    assertNotNull(responseBody);
+    assertEquals("Ok", responseBody.getBenefitCheckerStatus());
   }
 
   @Test
-  void createItem_returnsBadRequestStatus() throws Exception {
-    // This could be done in a better way
-    /*mockMvc
-        .perform(post("/api/v1/items")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"name\": \"Item Three\"}")
-            .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest())
-        .andExpect(content().json("{\"type\":\"about:blank\",\"title\":\"Bad Request\"," +
-            "\"status\":400,\"detail\":\"Invalid request content.\",\"instance\":\"/api/v1/items\"}"));
+  void performCheck_returnsBadRequestStatus() throws Exception {
+    BenefitCheckRequestBody itemRequestBody = BenefitCheckRequestBody.builder().build();
+    when(mockBenefitCheckerService.performCheck(itemRequestBody))
+            .thenReturn(BenefitCheckResponseBody.builder().build());
 
-    verify(mockBenefitCheckerService, never()).performCheck(any(BenefitCheckRequestBody.class));*/
+    mockMvc
+            .perform(post("/api/v1/benefitsCheck")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(BenefitCheckRequestBody.builder()
+                            .build()))
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+
+  }
+
+  @SneakyThrows
+  String toJson(BenefitCheckRequestBody benefitCheckRequestBody) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.writeValueAsString(benefitCheckRequestBody);
   }
 }

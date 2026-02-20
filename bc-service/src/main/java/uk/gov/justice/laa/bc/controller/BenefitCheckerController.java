@@ -2,8 +2,8 @@ package uk.gov.justice.laa.bc.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.laa.bc.api.BenefitsCheckerApi;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
@@ -22,7 +22,8 @@ public class BenefitCheckerController implements BenefitsCheckerApi {
 
   @Override
   public ResponseEntity<BenefitCheckResponseBody> benefitCheck(
-          @Nullable BenefitCheckRequestBody benefitCheckRequestBody) {
+          @RequestBody BenefitCheckRequestBody benefitCheckRequestBody) {
+    log.info("YESS {}", benefitCheckRequestBody);
     return ResponseEntity.ok(service.performCheck(benefitCheckRequestBody));
   }
 }

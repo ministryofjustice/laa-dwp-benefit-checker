@@ -11,6 +11,7 @@ paths:
       operationId: benefitCheck
       requestBody:
         description: perform a benefits check
+        required: true
         content:
           application/json:
             schema:
