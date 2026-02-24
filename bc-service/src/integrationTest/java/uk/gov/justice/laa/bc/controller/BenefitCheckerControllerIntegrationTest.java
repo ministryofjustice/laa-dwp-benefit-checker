@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.justice.laa.bc.BenefitCheckerApplication;
+import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 
 @SpringBootTest(classes = BenefitCheckerApplication.class)
 @AutoConfigureMockMvc
@@ -26,49 +29,37 @@ public class BenefitCheckerControllerIntegrationTest {
   @Autowired
   private MockMvc mockMvc;
 
-  @Test
-  void shouldGetAllItems() throws Exception {
-    mockMvc
-        .perform(get("/api/v1/items"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.*", hasSize(5)));
-  }
 
-  @Test
-  void shouldGetItem() throws Exception {
-    mockMvc.perform(get("/api/v1/items/1"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id").value(1))
-        .andExpect(jsonPath("$.name").value("Item One"))
-        .andExpect(jsonPath("$.description").value("This is a description of Item One."));
-  }
 
   @Test
   void shouldCreateItem() throws Exception {
+
+    BenefitCheckRequestBody request =
+            BenefitCheckRequestBody.builder()
+                    .clientReference("clientReference")
+                    .nino("nino")
+                    .dateOfAward("211226")
+                    .dateOfBirth("171226")
+                    .clientUserId("user")
+                    .clientOrgId("org")
+                    .lscServiceName("a")
+                    .surname("smith")
+                    .build();
+
     mockMvc
         .perform(
-            post("/api/v1/items")
+            post("/api/v1/benefitsCheck")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Item Six\", \"description\": \"This is a description of Item Six.\"}")
+                .content(toJson(request))
                 .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated());
+        .andExpect(status().isOk());
   }
 
-  @Test
-  void shouldUpdateItem() throws Exception {
-    mockMvc
-        .perform(
-            put("/api/v1/items/2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\": 2, \"name\": \"Item Two\", \"description\": \"This is a updated description of Item Three.\"}")
-                .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNoContent());
+  @SneakyThrows
+  String toJson(BenefitCheckRequestBody benefitCheckRequestBody) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.writeValueAsString(benefitCheckRequestBody);
   }
 
-  @Test
-  void shouldDeleteItem() throws Exception {
-    mockMvc.perform(delete("/api/v1/items/3")).andExpect(status().isNoContent());
-  }
+
 }
