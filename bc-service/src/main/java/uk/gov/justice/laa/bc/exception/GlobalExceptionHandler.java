@@ -25,19 +25,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   private static final URI DEFAULT_PROBLEM_TYPE = URI.create("about:blank");
 
-  /**
-   * The handler for ItemNotFoundException.
-   *
-   * @param exception the exception
-   * @return the response status with error message
-   */
-  @ExceptionHandler(ItemNotFoundException.class)
-  public ResponseEntity<Object> handleItemNotFound(
-      ItemNotFoundException exception, WebRequest request) {
-    ProblemDetail problemDetail = buildProblemDetail(NOT_FOUND, exception.getMessage(), request);
-    return handleExceptionInternal(exception, problemDetail, new HttpHeaders(), NOT_FOUND, request);
-  }
-
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotReadable(
       HttpMessageNotReadableException exception,

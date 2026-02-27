@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdl="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <env:Body>
+        <wsdl:check>
+            <wsdl:clientReference>aabaa7b2-b777-4a26-8ac0-9b65990fd8be</wsdl:clientReference>
+            <wsdl:nino>BM312175D</wsdl:nino>
+            <wsdl:surname>DEL CAMPO</wsdl:surname>
+            <wsdl:dateOfBirth>19720110</wsdl:dateOfBirth>
+            <wsdl:dateOfAward>20260205</wsdl:dateOfAward>
+            <wsdl:lscServiceName>597dfb6</wsdl:lscServiceName>
+            <wsdl:clientOrgId>Tq_TrSZ_Hf_Uz</wsdl:clientOrgId>
+            <wsdl:clientUserId>BL_bGss_VL_wzGi</wsdl:clientUserId>
+        </wsdl:check>
+    </env:Body>
+</env:Envelope>

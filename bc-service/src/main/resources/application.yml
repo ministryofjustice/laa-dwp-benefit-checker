@@ -1,8 +1,8 @@
 spring:
   application:
     name: LAA Benefit Checker 2.0
-
-
+  webservices:
+    wsdl-locations: classpath:META-INF/schemas/
 # used by actuator info endpoint
 info:
   app:
