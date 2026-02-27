@@ -6,8 +6,8 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import uk.gov.lsc.benefitchecker.data._1.BenefitCheckerRequest;
-import uk.gov.lsc.benefitchecker.data._1.BenefitCheckerResponse;
+import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerRequest;
+import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerResponse;
 
 import javax.xml.namespace.QName;
 
@@ -18,13 +18,14 @@ import javax.xml.namespace.QName;
 @Endpoint
 public class BcEndpoint {
 
-  public static final String LOCAL_PART = "check";
+  public static final String LOCAL_PART = "BenefitCheckerRequest";
   public static final String NAMESPACE_URI = "https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check";
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = LOCAL_PART)
   @ResponsePayload
   public JAXBElement<BenefitCheckerResponse> check(@RequestPayload JAXBElement<BenefitCheckerRequest> request) {
-    log.info("Got request {}", request.getValue());
+    log.info("Got request nino {}", request.getValue().getNino());
+    log.info("Got request client org id {}", request.getValue().getClientOrgId());
     BenefitCheckerResponse response = new BenefitCheckerResponse();
     response.setBenefitCheckerStatus("No");
     response.setConfirmationRef("a ref");
