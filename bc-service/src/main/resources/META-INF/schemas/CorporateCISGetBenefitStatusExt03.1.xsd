@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:ciscommonext="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt"
+  xmlns:ns1="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0"
+  elementFormDefault="qualified" attributeFormDefault="qualified">
+  <xs:import namespace="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt"
+    schemaLocation="CorporateCISCommonExt02.0.xsd"/>
+
+  <xs:element name="GetBenefitStatusExtResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="itemList" type="ns1:Item" nillable="false" minOccurs="0"
+          maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBenefitStatusExtRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="surname" type="ns1:SurnameType" nillable="false"/>
+        <xs:element name="dateOfBirth" type="ciscommonext:ExtCISDate" nillable="false"/>
+        <xs:element name="nino" type="ns1:NinoType" nillable="false"/>
+        <xs:element name="dateOfAward" type="ciscommonext:ExtCISDate" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="NinoType">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="9"/>
+      <xs:pattern value="[a-zA-Z]{2}[0-9]{6}[a-dA-D]?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SurnameType">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="Item">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" nillable="false"/>
+      <xs:element name="value" type="xs:string" nillable="false"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
