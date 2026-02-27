@@ -4,13 +4,26 @@
 	attributeFormDefault="qualified" 
     targetNamespace="http://lsc.gov.uk/benefitchecker/data/1.0" 
     xmlns:ns1="http://lsc.gov.uk/benefitchecker/data/1.0" 
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"> 
-	
-	
-	
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    
-    <!--  ********************* -->
+	<xs:element
+			name="benefitCheckerRequest"
+			nillable="false"
+			type="ns1:benefitCheckerRequest"/>
+
+	<xs:element
+			name="benefitCheckerResponse"
+			nillable="false"
+			type="ns1:benefitCheckerResponse"/>
+
+	<xs:element
+			name="benefitCheckerFaultException"
+			nillable="false"
+			type="ns1:benefitCheckerFaultException"/>
+
+
+
+	<!--  ********************* -->
     <!--  ***   Request     *** -->
     <!--  ********************* -->
 		
