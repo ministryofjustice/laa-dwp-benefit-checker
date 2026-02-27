@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+	targetNamespace="https://lsc.gov.uk/benefitchecker/service/1.0" 
+	xmlns:entenq="http://lsc.gov.uk/benefitchecker/data/1.0" 
+	xmlns:impl="https://lsc.gov.uk/benefitchecker/service/1.0" 
+	xmlns:intf="https://lsc.gov.uk/benefitchecker/service/1.0" 
+	xmlns:tns1="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check" 
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+	
+  <wsdl:types>
+    <schema
+    	targetNamespace="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check" 
+    	xmlns="http://www.w3.org/2001/XMLSchema" 
+    	elementFormDefault="qualified"  
+       	xmlns:entenq="http://lsc.gov.uk/benefitchecker/data/1.0"
+    	xmlns:impl="https://lsc.gov.uk/benefitchecker/service/1.0" 
+    	xmlns:intf="https://lsc.gov.uk/benefitchecker/service/1.0" 
+    	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    	
+	  	<import 
+			namespace="http://lsc.gov.uk/benefitchecker/data/1.0" 
+			schemaLocation="../bc-service/src/main/resources/META-INF/schemas/LSC_BenefitChecker_WS_01.xsd"/>
+				
+		<element 
+			name="benefitCheckerRequest" 
+			nillable="false" 
+			type="entenq:benefitCheckerRequest"/>
+				
+		<element 
+			name="benefitCheckerResponse" 
+			nillable="false" 
+			type="entenq:benefitCheckerResponse"/>
+			
+		<element 
+			name="benefitCheckerFaultException" 
+			nillable="false" 
+			type="entenq:benefitCheckerFaultException"/>	
+				
+	</schema>	
+  </wsdl:types>
+  
+  <wsdl:message name="benefitCheckerRequest">
+    <wsdl:part element="tns1:benefitCheckerRequest" name="parameters"/>
+  </wsdl:message>
+  
+  <wsdl:message name="benefitCheckerResponse">
+    <wsdl:part element="tns1:benefitCheckerResponse" name="parameters"/>
+  </wsdl:message>
+  
+  <wsdl:message name="benefitCheckerFaultException">
+    <wsdl:part element="tns1:benefitCheckerFaultException" name="fault"/>
+  </wsdl:message>
+  
+  
+  <wsdl:portType name="benefitChecker">
+    <!--  Synchronous Outbound operation -->
+    <wsdl:operation name="check">
+      <wsdl:input message="intf:benefitCheckerRequest" name="benefitCheckerRequest"/>
+      <wsdl:output message="intf:benefitCheckerResponse" name="benefitCheckerResponse"/>
+      <wsdl:fault message="intf:benefitCheckerFaultException" name="benefitCheckerFaultException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  
+  
+  <wsdl:binding name="benefitCheckerWSSoapBinding" type="intf:benefitChecker">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="check">
+      <wsdlsoap:operation/>
+      <wsdl:input>
+        <wsdlsoap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body parts="parameters" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="benefitCheckerFaultException">
+        <wsdlsoap:fault name="benefitCheckerFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  
+  <wsdl:service name="benefitCheckerWS">
+    <wsdl:port binding="intf:benefitCheckerWSSoapBinding" name="benefitChecker">
+      <wsdlsoap:address location="http://localhost/lsc-services/ws-ext/benefitchecker"/>
+    </wsdl:port>
+  </wsdl:service>
+  
+</wsdl:definitions>
