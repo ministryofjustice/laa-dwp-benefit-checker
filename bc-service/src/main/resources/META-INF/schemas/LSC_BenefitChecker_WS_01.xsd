@@ -2,22 +2,22 @@
 <xs:schema
     elementFormDefault="qualified"  
 	attributeFormDefault="qualified" 
-    targetNamespace="http://lsc.gov.uk/benefitchecker/data/1.0" 
-    xmlns:ns1="http://lsc.gov.uk/benefitchecker/data/1.0" 
+    targetNamespace="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check"
+    xmlns:ns1="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 	<xs:element
-			name="benefitCheckerRequest"
+			name="BenefitCheckerRequest"
 			nillable="false"
 			type="ns1:benefitCheckerRequest"/>
 
 	<xs:element
-			name="benefitCheckerResponse"
+			name="BenefitCheckerResponse"
 			nillable="false"
 			type="ns1:benefitCheckerResponse"/>
 
 	<xs:element
-			name="benefitCheckerFaultException"
+			name="BenefitCheckerFaultException"
 			nillable="false"
 			type="ns1:benefitCheckerFaultException"/>
 

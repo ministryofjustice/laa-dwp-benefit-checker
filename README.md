@@ -16,8 +16,10 @@ Includes the following subprojects:
 # Generate JAXB classes
 ./gradlew xjc
 
-curl --header "Content-Type: text/xml" -d @request.xml http://localhost:8080/services | xmllint --format
-
+# Test the Ws (after starting server locally)
+curl -v --header "Content-Type: text/xml" -d @request.xml http://localhost:8080/ws
+# To access WSDL
+http://localhost:8080/
 # Sort out Gradle wierdness
 ./gradlew --stop
 rm -rf build .gradle
