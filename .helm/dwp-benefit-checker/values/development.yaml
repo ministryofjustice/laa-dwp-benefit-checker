@@ -9,7 +9,7 @@ image:
   tag: null
 
 service_account:
-  name: laa-data-access-uat-service-account
+  name: laa-data-access-dev-service-account
 
 service:
   type: ClusterIP
@@ -24,7 +24,7 @@ ingress:
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       SecRuleEngine On
       SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:tx.allowed_methods=GET HEAD POST OPTIONS PUT PATCH DELETE"
-      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-data-stewardship-access-team,tag:namespace=laa-data-access-api-uat"
+      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-data-stewardship-access-team,tag:namespace=laa-data-access-api-dev"
   hosts: []
 
 ingressInternal:
@@ -51,5 +51,5 @@ autoscaling:
 
 sentry:
   enabled: true
-  environment: uat
+  environment: dev
   tracesSampleRate: 1
