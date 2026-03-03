@@ -24,6 +24,7 @@ public class DwpClientTest {
 
     GetBenefitStatusExtRequest request = new GetBenefitStatusExtRequest();
     request.setNino("foo");
+    client.setDefaultUri("http://dwpmock.aws.uat.legalservices.gov.uk/axis/services/CorporateCISGetBenefitStatusExtWS03");
     GetBenefitStatusExtResponse response = client.getBenefitStatusExtResponse(request);
   //  assertEquals("Warsaw", response.getCountry().getCapital());
   }
