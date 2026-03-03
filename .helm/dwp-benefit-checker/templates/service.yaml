@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "data-access-api.fullname" . }}
+  name: {{ include "dwp-benefit-checker.fullname" . }}
+  namespace: { { .Values.namespace } }
   labels:
-    {{- include "data-access-api.labels" . | nindent 4 }}
+    {{- include "dwp-benefit-checker.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:

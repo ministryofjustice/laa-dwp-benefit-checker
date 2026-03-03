@@ -1,4 +1,4 @@
-# Default values for data-access-api.
+# Default values for dwp-benefit-checker.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -9,7 +9,7 @@ image:
   tag: null
 
 service_account:
-  name: laa-data-access-staging-service-account
+  name: laa-dwp-benefit-checker-staging-service-account
 
 service:
   type: ClusterIP
@@ -19,24 +19,24 @@ ingress:
   enabled: true
   className: modsec-non-prod
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: "laa-data-access-api-laa-data-access-api-staging-green"
+    external-dns.alpha.kubernetes.io/set-identifier: "laa-dwp-benefit-checker-laa-dwp-benefit-checker-staging-green"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     nginx.ingress.kubernetes.io/enable-modsecurity: "true"
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       SecRuleEngine On
       SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:tx.allowed_methods=GET HEAD POST OPTIONS PUT PATCH DELETE"
-      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-data-stewardship-access-team,tag:namespace=laa-data-access-api-staging"
+      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-data-stewardship-access-team,tag:namespace=laa-dwp-benefit-checker-staging"
   hosts:
-    - "laa-data-access-api-staging.cloud-platform.service.justice.gov.uk"
+    - "laa-dwp-benefit-checker-staging.cloud-platform.service.justice.gov.uk"
 
 ingressInternal:
   enabled: true
   className: internal-non-prod
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: "laa-data-access-api-internal-laa-data-access-api-staging-green"
+    external-dns.alpha.kubernetes.io/set-identifier: "laa-dwp-benefit-checker-internal-laa-dwp-benefit-checker-staging-green"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
   hosts:
-    - "laa-data-access-api-staging.internal-non-prod.cloud-platform.service.justice.gov.uk"
+    - "laa-dwp-benefit-checker-staging.internal-non-prod.cloud-platform.service.justice.gov.uk"
 
 resources:
   limits:
