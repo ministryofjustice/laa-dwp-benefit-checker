@@ -9,6 +9,9 @@ import uk.gov.justice.laa.bc.client.DwpClient;
 import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerRequest;
 import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerResponse;
 
+/**
+ * BcService.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -16,6 +19,12 @@ public class BcService {
 
   private final DwpClient dwpClient;
 
+  /**
+   * perform.
+   *
+   * @param request BenefitCheckerRequest
+   * @return BenefitCheckerResponse
+   */
   public BenefitCheckerResponse perform(BenefitCheckerRequest request) {
 
     // TODO: Validate client id etc..
