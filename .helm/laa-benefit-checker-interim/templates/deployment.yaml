@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dwp-benefit-checker.fullname" . }}
+  name: {{ include "laa-benefit-checker-interim.fullname" . }}
   labels:
-    {{- include "dwp-benefit-checker.labels" . | nindent 4 }}
+    {{- include "laa-benefit-checker-interim.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -15,11 +15,11 @@ spec:
       maxSurge: 100%
   selector:
     matchLabels:
-      {{- include "dwp-benefit-checker.selectorLabels" . | nindent 6 }}
+      {{- include "laa-benefit-checker-interim.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "dwp-benefit-checker.selectorLabels" . | nindent 8 }}
+        {{- include "laa-benefit-checker-interim.selectorLabels" . | nindent 8 }}
       annotations:
         releaseTime: {{ dateInZone "2006-01-02 15:04:05Z" (now) "UTC"| quote }}
     spec:
@@ -58,6 +58,4 @@ spec:
               value: {{ .Values.spring.profile | quote }}
             - name: AWS_REGION
               value: {{ .Values.aws.region | quote }}
-            - name: FEATURE_DISABLESECURITY
-              value: "true"
             {{ include "sentryConfig" . | nindent 12 }}

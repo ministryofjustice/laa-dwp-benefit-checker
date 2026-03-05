@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "dwp-benefit-checker.fullname" . }}
+  name: {{ include "laa-benefit-checker-interim.fullname" . }}
   labels:
-    {{- include "dwp-benefit-checker.labels" . | nindent 4 }}
+    {{- include "laa-benefit-checker-interim.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "dwp-benefit-checker.fullname" . }}
+    name: {{ include "laa-benefit-checker-interim.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
