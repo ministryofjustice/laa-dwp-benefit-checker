@@ -4,6 +4,7 @@ plugins {
     id "com.github.bjornvester.xjc" version "1.9.0"
 }
 
+checkstyleMain.source = "src/main/java"
 
 java {
     toolchain {
