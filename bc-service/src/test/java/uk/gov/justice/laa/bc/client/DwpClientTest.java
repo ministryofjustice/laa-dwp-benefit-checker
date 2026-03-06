@@ -1,31 +1,36 @@
 package uk.gov.justice.laa.bc.client;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.ws.client.core.WebServiceTemplate;
 import uk.gov.dwp.common.cis.getbenefitstatusext.service._3.GetBenefitStatusExtRequest;
 import uk.gov.dwp.common.cis.getbenefitstatusext.service._3.GetBenefitStatusExtResponse;
-import uk.gov.justice.laa.bc.config.WebServiceClientConfig;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = WebServiceClientConfig.class, loader = AnnotationConfigContextLoader.class)
+/**
+ *  DwpClient Test.
+ */
+@ExtendWith(MockitoExtension.class)
 public class DwpClientTest {
 
-  @Autowired
-  DwpClient client;
+  @InjectMocks
+  private DwpClient client;
+
+  @Mock
+  private WebServiceTemplate webServiceTemplate;
 
   @Test
   public void givenDwpClient_whenPerformCheck_thenIsSuccess() {
-
     GetBenefitStatusExtRequest request = new GetBenefitStatusExtRequest();
-    request.setNino("foo");
-    client.setDefaultUri("http://dwpmock.aws.uat.legalservices.gov.uk/axis/services/CorporateCISGetBenefitStatusExtWS03");
-//    GetBenefitStatusExtResponse response = client.getBenefitStatusExtResponse(request);
-//    assertEquals("Warsaw", response.getCountry().getCapital());
+    GetBenefitStatusExtResponse response = new GetBenefitStatusExtResponse();
+    when(webServiceTemplate.marshalSendAndReceive(any())).thenReturn(response);
+
+    assertNotNull(client.getBenefitStatusExtResponse(request));
   }
 }
