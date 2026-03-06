@@ -56,3 +56,17 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app: {{ template "laa-benefit-checker-interim.name" . }}
 release: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+Create ingress configuration
+*/}}
+{{- define "laa-benefit-checker-interim.ingress" -}}
+{{- $secret := (lookup "v1" "Secret" .Release.Namespace "aws-secrets") }}
+{{- if $secret }}
+{{- $allowlistSourceRange := $secret.data.ALLOWLIST_SOURCE_RANGE | b64dec }}
+{{- if $allowlistSourceRange }}
+nginx.ingress.kubernetes.io/whitelist-source-range: {{ $allowlistSourceRange }}
+external-dns.alpha.kubernetes.io/set-identifier: {{ include "laa-benefit-checker-interim.fullname" . }}-{{ $.Values.ingress.environmentName}}-green
+{{- end }}
+{{- end }}
+{{- end }}
