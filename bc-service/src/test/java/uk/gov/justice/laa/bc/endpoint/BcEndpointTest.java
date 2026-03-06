@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.laa.bc.service.BcService;
 import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerRequest;
