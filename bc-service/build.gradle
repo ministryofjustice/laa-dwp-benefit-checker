@@ -22,7 +22,11 @@ test {
 jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/BCApplication.class'])
+            fileTree(dir: it, exclude: [
+                    '**/BCApplication.class',
+                    '**/lsc',
+                    '**/dwp'
+            ])
         }))
     }
 }
@@ -30,7 +34,11 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/BCApplication.class'])
+            fileTree(dir: it, exclude: [
+                    '**/BCApplication.class',
+                    '**/lsc',
+                    '**/dwp'
+            ])
         }))
     }
 }
