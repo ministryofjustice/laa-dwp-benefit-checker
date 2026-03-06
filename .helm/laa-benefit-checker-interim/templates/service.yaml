@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "laa-benefit-checker-interim.fullname" . }}
+  labels:
+    {{- include "laa-benefit-checker-interim.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "laa-benefit-checker-interim.selectorLabels" . | nindent 4 }}

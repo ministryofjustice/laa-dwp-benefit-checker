@@ -1,0 +1,62 @@
+# Default values for dwp-benefit-checker.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: null
+  tag: null
+
+service_account:
+  name: laa-dwp-benefit-checker-uat-service-account
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: modsec-non-prod
+  annotations:
+    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-laa-benefit-checker-interim-uat-green"
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRuleEngine On
+      SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:tx.allowed_methods=GET HEAD POST OPTIONS PUT PATCH DELETE"
+      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-data-stewardship-access-team,tag:namespace=laa-benefit-checker-interim-uat"
+  internalHost:
+    host: "laa-benefit-checker-interim-uat.apps.live.cloud-platform.service.justice.gov.uk"
+    path: /
+  externalHost:
+    host: "laa-benefit-checker-interim-uat.apps.live.cloud-platform.service.justice.gov.uk"
+    paths:
+      swaggerPath: /open-api/swagger-ui
+      openApiPath: /open-api/api-docs
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1G
+  requests:
+    cpu: 25m
+    memory: 1G
+
+spring:
+  profile: uat
+
+aws:
+  region: eu-west-2
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 8
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 70
+
+sentry:
+  enabled: true
+  environment: uat
+  tracesSampleRate: 1

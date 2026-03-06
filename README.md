@@ -34,6 +34,13 @@ The *.sql scripts in  `src/main/resources` have been included to provide an exam
 ### Run application via Docker
 `docker compose up`
 
+## Code Coverage
+./gradlew jacocoTestReport
+./gradlew jacocoTestCoverageVerification
+
+helm upgrade --install <name-of-service-as-defined-in-helm-chart> -f <path-to-values-files.yaml> --namespace=<cluster-namespace>
+helm upgrade --install dwp-benefit-checker -f dwp-benefit-checker/values/development.yaml --namespace=laa-dwp-benefit-checker dwp-benefit-checker
+
 ## Application Endpoints
 
 ### API Documentation
