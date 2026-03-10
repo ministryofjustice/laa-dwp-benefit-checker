@@ -1,6 +1,11 @@
 # Specify java runtime base image
 FROM amazoncorretto:25-alpine
 
+# CVE-2026-22184
+RUN apk update && \
+    apk add --no-cache --upgrade zlib && \
+    rm -rf /var/cache/apk/*
+
 # Set up working directory in the container
 RUN mkdir -p /opt/laa-dwp-benefit-checker-2.0/
 WORKDIR /opt/laa-dwp-benefit-checker-2.0/
