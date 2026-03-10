@@ -15,12 +15,12 @@ dependencies {
         }
     }
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1'
-    implementation 'org.openapitools:jackson-databind-nullable:0.2.8'
     implementation("com.fasterxml.jackson.core:jackson-core") {
         version {
             strictly("2.21.1")
         }
     }
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.8'
 }
 
 sourceSets.main.java.srcDirs += ['generated/src/main/java']
