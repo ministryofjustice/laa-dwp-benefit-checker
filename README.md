@@ -4,7 +4,7 @@
 
 ## Overview
 
-API to check whether someone is on benefits or not.  There are a number of clients that 
+API to check whether someone is on benefits or not.  There are a number of clients that
 
 ### Project Structure
 Includes the following subprojects:
@@ -43,8 +43,9 @@ rm -rf build .gradle
 ./gradlew jacocoTestReport
 ./gradlew jacocoTestCoverageVerification
 
+kubectl get pods -n laa-benefit-checker-interim-uat
 helm upgrade --install <name-of-service-as-defined-in-helm-chart> -f <path-to-values-files.yaml> --namespace=<cluster-namespace>
-helm upgrade --install dwp-benefit-checker -f dwp-benefit-checker/values/development.yaml --namespace=laa-dwp-benefit-checker dwp-benefit-checker
+helm upgrade --install laa-benefit-checker-interim -f laa-benefit-checker-interim-uat/values/development.yaml --namespace=laa-benefit-checker-interim-uat laa-benefit-checker-interim-uat
 
 ## Application Endpoints
 
