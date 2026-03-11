@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: checkstyle-report
-          path: spring-boot-microservice-service/build/reports/checkstyle
+          path: bc-service/build/reports/checkstyle/main.html
           retention-days: 14
 
       - name: Upload test report
