@@ -127,12 +127,6 @@ jobs:
 
       - uses: actions/checkout@v5
 
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v5
-        with:
-          name: service-jar
-          path: bc-service/build/libs/
-
         # ---------- AWS auth (OIDC) ----------
       - name: Configure AWS creds
         uses: aws-actions/configure-aws-credentials@v5.1.0
