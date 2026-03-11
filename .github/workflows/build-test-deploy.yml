@@ -38,6 +38,13 @@ jobs:
       - name: Integration test
         run: ./gradlew integrationTest
 
+      - name: Upload service JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: service-jar
+          path: bc-service/build/libs/*.jar
+          retention-days: 1
+
       - name: Upload checkstyle report for bc-service
         if: always()
         uses: actions/upload-artifact@v4
@@ -126,6 +133,12 @@ jobs:
     steps:
 
       - uses: actions/checkout@v5
+
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: service-jar
+          path: bc-service/build/libs/
 
         # ---------- AWS auth (OIDC) ----------
       - name: Configure AWS creds
