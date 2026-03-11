@@ -19,7 +19,7 @@ import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
 import uk.gov.justice.laa.bc.service.BenefitCheckerService;
 
-@WebMvcTest(BenefitCheckerController.class)
+@WebMvcTest(uk.gov.justice.laa.bc.controller.BenefitCheckerController.class)
 class BenefitCheckerControllerTest {
 
   @Autowired
@@ -61,7 +61,8 @@ class BenefitCheckerControllerTest {
             .andReturn();
 
     String json = result.getResponse().getContentAsString();
-    BenefitCheckResponseBody responseBody = objectMapper.readValue(json, BenefitCheckResponseBody.class);
+    BenefitCheckResponseBody responseBody = objectMapper.readValue(
+        json, BenefitCheckResponseBody.class);
 
     assertNotNull(responseBody);
     assertEquals("Ok", responseBody.getBenefitCheckerStatus());

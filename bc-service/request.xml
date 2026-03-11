@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <soapenv:Body>
+        <BenefitCheckerRequest xmlns="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check">
+            <clientOrgId>xx_xxxx_xx_xx</clientOrgId>
+            <clientUserId>xx_xxxx_xx_xxxx</clientUserId>
+            <clientReference>ABC-123</clientReference>
+            <lscServiceName> xx_xxxx </lscServiceName>
+            <nino>JW953007D</nino>
+            <surname>PHILLIPS</surname>
+            <dateOfBirth>19850228</dateOfBirth>
+            <dateOfAward>20080201</dateOfAward>
+        </BenefitCheckerRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

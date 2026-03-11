@@ -12,13 +12,18 @@ Includes the following subprojects:
 - `bc-api` - OpenAPI specification used for generating API stub interfaces and documentation.
 - `bc-service` - REST API service.
 
-### Add Repository To Snyk
-Ensure that your repository has been added to the [Legal Aid Agency Snyk](https://app.snyk.io/org/legal-aid-agency) organisation.
 
-Also add `SNYK_TOKEN` as a repository secret.
+# Generate JAXB classes
+./gradlew xjc
 
-### Database scripts
-The *.sql scripts in  `src/main/resources` have been included to provide an example database for demonstration purposes only and should be removed for your application.
+# Test the Ws (after starting server locally)
+curl -v --header "Content-Type: text/xml" -d @request.xml http://localhost:8080/ws
+# To access WSDL
+http://localhost:8080/
+# Sort out Gradle wierdness
+./gradlew --stop
+rm -rf build .gradle
+./gradlew build --refresh-dependencies
 
 ## Build And Run Application
 
