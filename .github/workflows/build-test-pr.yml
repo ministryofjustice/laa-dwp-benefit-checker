@@ -44,8 +44,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: checkstyle-report
-          path: |
-            bc-service/build/reports/checkstyle/test.html
+          path: bc-service/build/reports/checkstyle/main.html
           retention-days: 14
 
       - name: Upload test report
