@@ -70,14 +70,14 @@ runs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         GIT_SHA: ${{ github.sha }}
         KUBE_NAMESPACE: ${{ inputs.kube-namespace }}
-        VALUES_FILE: .helm/data-access-api/values/${{ inputs.app-environment }}.yaml
+        VALUES_FILE: .helm/laa-benefit-checker-interim/values/${{ inputs.app-environment }}.yaml
         RELEASE_NAME: ${{ steps.extract_release_name.outputs.release-name }}
       run: |
-        ingress_name="$RELEASE_NAME-data-access-api"
+        ingress_name="$RELEASE_NAME-laa-benefit-checker-interim"
         external_host="$RELEASE_NAME-$KUBE_NAMESPACE.cloud-platform.service.justice.gov.uk"
         internal_host="$RELEASE_NAME-internal-$KUBE_NAMESPACE.internal-non-prod.cloud-platform.service.justice.gov.uk"
         external_identifier="$ingress_name-$KUBE_NAMESPACE-green"
-        internal_identifier="$RELEASE_NAME-data-access-api-internal-$KUBE_NAMESPACE-green"
+        internal_identifier="$RELEASE_NAME-laa-benefit-checker-interim-internal-$KUBE_NAMESPACE-green"
         branch_name=${{ steps.extract_release_name.outputs.branch-name }}
         LAA_IPS=$(curl -s https://raw.githubusercontent.com/ministryofjustice/laa-ip-allowlist/main/cidrs.txt | tr -d ' ' | tr '\n' ',' | sed 's/,/\\,/g' | sed 's/\\,$//')
 
@@ -103,7 +103,7 @@ runs:
             --install --wait
         fi
 
-        helm upgrade $RELEASE_NAME .helm/data-access-api \
+        helm upgrade $RELEASE_NAME .helm/laa-benefit-checker-interim \
           --namespace ${KUBE_NAMESPACE} \
           --set image.repository="${ECR_REGISTRY}/${ECR_REPOSITORY}" \
           --set image.tag="${GIT_SHA}" \
