@@ -70,3 +70,14 @@ external-dns.alpha.kubernetes.io/set-identifier: {{ include "laa-benefit-checker
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "laa-benefit-checker-interim.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "laa-benefit-checker-interim.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}

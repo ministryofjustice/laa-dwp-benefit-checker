@@ -8,8 +8,8 @@ image:
   repository: null
   tag: null
 
-service_account:
-  name: laa-data-access-dev-service-account
+serviceAccount:
+  create: false
 
 service:
   type: ClusterIP

@@ -23,7 +23,7 @@ spec:
       annotations:
         releaseTime: {{ dateInZone "2006-01-02 15:04:05Z" (now) "UTC"| quote }}
     spec:
-      serviceAccountName: "{{ .Values.service_account.name }}"
+      serviceAccountName: {{ include "laa-benefit-checker-interim.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
