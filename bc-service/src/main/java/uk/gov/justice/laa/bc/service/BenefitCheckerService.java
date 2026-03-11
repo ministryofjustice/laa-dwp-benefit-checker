@@ -30,7 +30,9 @@ public class BenefitCheckerService {
     dwpSoapClient.performCheck();
 
     // TODO: Call DWP
-    return BenefitCheckResponseBody.builder().benefitCheckerStatus("Yes").originalClientRef(request.getClientReference())
+    return BenefitCheckResponseBody.builder()
+            .benefitCheckerStatus("Yes")
+            .originalClientRef(request.getClientReference())
             //.confirmationRef()
             .build();
   }
