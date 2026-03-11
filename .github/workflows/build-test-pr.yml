@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: test-report
-          path: spring-boot-microservice-service/build/reports/tests
+          path: bc-service/build/reports/jacoco/*/jacocoTestReport.xml
           retention-days: 14
 
       - name: Upload jacoco coverage report
