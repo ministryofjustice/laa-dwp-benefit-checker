@@ -74,6 +74,9 @@ runs:
         RELEASE_NAME: ${{ steps.extract_release_name.outputs.release-name }}
       run: |
         echo "deploying"
+  
+        kubectl get ingress -A -o wide | grep 'apps.live.cloud-platform.service.justice.gov.uk'
+        kubectl -n ${KUBE_NAMESPACE} describe ingress laa-benefit-checker-interim
 
         helm upgrade $RELEASE_NAME .helm/laa-benefit-checker-interim \
           --namespace ${KUBE_NAMESPACE} \
