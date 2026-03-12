@@ -74,8 +74,6 @@ runs:
         RELEASE_NAME: ${{ steps.extract_release_name.outputs.release-name }}
       run: |
         echo "deploying"
-        
-        kubectl -n ${KUBE_NAMESPACE} delete ingress laa-benefit-checker-interim || :
 
         helm upgrade $RELEASE_NAME .helm/laa-benefit-checker-interim \
           --namespace ${KUBE_NAMESPACE} \
