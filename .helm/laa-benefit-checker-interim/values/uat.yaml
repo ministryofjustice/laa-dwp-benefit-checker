@@ -5,11 +5,10 @@
 replicaCount: 2
 
 image:
-  repository: null
-  tag: null
+  repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/laa-access-court-data/laa-benefit-checker-interim-uat
 
-service_account:
-  name: laa-dwp-benefit-checker-uat-service-account
+serviceAccount:
+  create: false
 
 service:
   type: ClusterIP

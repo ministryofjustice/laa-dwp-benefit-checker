@@ -73,48 +73,12 @@ runs:
         VALUES_FILE: .helm/laa-benefit-checker-interim/values/${{ inputs.app-environment }}.yaml
         RELEASE_NAME: ${{ steps.extract_release_name.outputs.release-name }}
       run: |
-        ingress_name="$RELEASE_NAME-laa-benefit-checker-interim"
-        external_host="$RELEASE_NAME-$KUBE_NAMESPACE.cloud-platform.service.justice.gov.uk"
-        internal_host="$RELEASE_NAME-internal-$KUBE_NAMESPACE.internal-non-prod.cloud-platform.service.justice.gov.uk"
-        external_identifier="$ingress_name-$KUBE_NAMESPACE-green"
-        internal_identifier="$RELEASE_NAME-laa-benefit-checker-interim-internal-$KUBE_NAMESPACE-green"
-        branch_name=${{ steps.extract_release_name.outputs.branch-name }}
-        LAA_IPS=$(curl -s https://raw.githubusercontent.com/ministryofjustice/laa-ip-allowlist/main/cidrs.txt | tr -d ' ' | tr '\n' ',' | sed 's/,/\\,/g' | sed 's/\\,$//')
+        echo "deploying"
 
-        echo "Deploying commit: $GIT_SHA under release name: $RELEASE_NAME to $external_host and $internal_host..."
-
-        echo "branch name: $branch_name"
-
-        if [ "$branch_name" == "main" ]; then
-          case "${{ inputs.app-environment }}" in
-            production)
-              export SPRING_PROFILE="main"
-              ;;
-            *)
-              export SPRING_PROFILE="unsecured"
-              ;;
-          esac
-        else
-          export SPRING_PROFILE="preview"
-          # Using Bitnami legacy with PostgreSQL 17.2 (specified in values.yaml)
-          helm upgrade ${RELEASE_NAME}-postgresql oci://registry-1.docker.io/bitnamicharts/postgresql \
-            -f .helm/bitnami_postgres/values.yaml \
-            --namespace ${KUBE_NAMESPACE} \
-            --install --wait
-        fi
-        kubectl get ingress -A -o wide | grep 'apps.live.cloud-platform.service.justice.gov.uk'
-        kubectl -n ${KUBE_NAMESPACE} describe ingress laa-benefit-checker-interim
         helm upgrade $RELEASE_NAME .helm/laa-benefit-checker-interim \
           --namespace ${KUBE_NAMESPACE} \
           --set image.repository="${ECR_REGISTRY}/${ECR_REPOSITORY}" \
           --set image.tag="${GIT_SHA}" \
-          --set ingress.annotations."external-dns\.alpha\.kubernetes\.io/set-identifier"="$external_identifier" \
-          --set ingress.annotations."nginx\.ingress\.kubernetes\.io/whitelist-source-range"="$LAA_IPS" \
-          --set ingress.hosts="{$external_host}" \
-          --set ingressInternal.annotations."external-dns\.alpha\.kubernetes\.io/set-identifier"="$internal_identifier" \
-          --set ingressInternal.hosts="{$internal_host}" \
-          --set spring.profile="${SPRING_PROFILE}" \
-          --set aws.region="${ECR_REGION}" \
           --values ${VALUES_FILE} \
           --install \
           --wait
