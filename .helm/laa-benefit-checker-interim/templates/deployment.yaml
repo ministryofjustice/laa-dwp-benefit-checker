@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: laa-benefit-checker-interim
+  name: {{ include "laa-benefit-checker-interim.fullname" . }}
   labels:
     {{- include "laa-benefit-checker-interim.labels" . | nindent 4 }}
 spec:
