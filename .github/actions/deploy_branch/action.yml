@@ -102,7 +102,8 @@ runs:
             --namespace ${KUBE_NAMESPACE} \
             --install --wait
         fi
-
+        kubectl get ingress -A -o wide | grep 'apps.live.cloud-platform.service.justice.gov.uk'
+        kubectl -n ${KUBE_NAMESPACE} describe ingress laa-benefit-checker-interim
         helm upgrade $RELEASE_NAME .helm/laa-benefit-checker-interim \
           --namespace ${KUBE_NAMESPACE} \
           --set image.repository="${ECR_REGISTRY}/${ECR_REPOSITORY}" \
