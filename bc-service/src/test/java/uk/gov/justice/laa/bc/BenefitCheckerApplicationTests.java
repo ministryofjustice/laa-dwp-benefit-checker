@@ -22,9 +22,7 @@ class BenefitCheckerApplicationTests {
 
     try (MockedStatic<SpringApplication> mockedSpringApplication
              = Mockito.mockStatic(SpringApplication.class)) {
-      mockedSpringApplication.when(() -> SpringApplication.run(
-          any(Class.class), any(String[].class)))
-          .thenReturn(null); // Or a mock ApplicationContext if needed for further verification
+      mockedSpringApplication.when(() -> SpringApplication.run(any(Class.class), any(String[].class))).thenReturn(null); // Or a mock ApplicationContext if needed for further verification
 
       // Act
       BenefitCheckerApplication.main(args);
