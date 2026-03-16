@@ -35,6 +35,7 @@ More information on GDS can be found [here](https://gds-way.digital.cabinet-offi
 
 # Test the Ws (after starting server locally)
 curl -v --header "Content-Type: text/xml" -d @request.xml http://localhost:8080/ws
+curl -v --header "Content-Type: text/xml" -d @request.xml https://laa-benefit-checker-interim-uat.apps.live.cloud-platform.service.justice.gov.uk/ws
 # To access WSDL
 http://localhost:8080/
 # Sort out Gradle wierdness
@@ -60,6 +61,7 @@ rm -rf build .gradle
 ./gradlew jacocoTestReport
 ./gradlew jacocoTestCoverageVerification
 
+kubectl config set-context --current --namespace=laa-benefit-checker-interim-uat
 kubectl -n laa-benefit-checker-interim-uat get secrets
 kubectl get ingress -n laa-benefit-checker-interim-uat
 kubectl delete ingress github-action-r-laa-benefit-checker-interim -n laa-benefit-checker-interim-uat
