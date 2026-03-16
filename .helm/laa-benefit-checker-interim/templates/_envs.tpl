@@ -12,7 +12,7 @@
 - name: SENTRY_DSN
   valueFrom:
     secretKeyRef:
-      name: laa-benefit-checker-interim-uat
+      name: aws-secrets
       key: SENTRY_DSN
 - name: SENTRY_ENVIRONMENT
   value: {{ .Values.sentry.environment | quote }}
