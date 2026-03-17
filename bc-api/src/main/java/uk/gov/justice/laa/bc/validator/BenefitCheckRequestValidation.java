@@ -11,19 +11,25 @@ import java.lang.annotation.Target;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 
 @Documented
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = BenefitCheckRequestValidation.BenefitCheckRequestValidator.class)
 public @interface BenefitCheckRequestValidation {
   String message() default "This isn't correct";
+
   Class[] groups() default {};
+
   Class[] payload() default {};
+
   class BenefitCheckRequestValidator implements
       ConstraintValidator<BenefitCheckRequestValidation, BenefitCheckRequestBody> {
     @Override
-    public boolean isValid(BenefitCheckRequestBody benefitCheckRequestBody, ConstraintValidatorContext constraintValidatorContext) {
-      boolean credentialsOK = validateCredentials(benefitCheckRequestBody, constraintValidatorContext);
-      boolean contentOk = BenefitCheckerHelper.validateContent(benefitCheckRequestBody, constraintValidatorContext);
+    public boolean isValid(BenefitCheckRequestBody benefitCheckRequestBody,
+                           ConstraintValidatorContext constraintValidatorContext) {
+      boolean credentialsOK =
+          validateCredentials(benefitCheckRequestBody, constraintValidatorContext);
+      boolean contentOk =
+          BenefitCheckerHelper.validateContent(benefitCheckRequestBody, constraintValidatorContext);
       return contentOk && credentialsOK;
     }
 
@@ -37,23 +43,38 @@ public @interface BenefitCheckRequestValidation {
      * @param inboundWSRequest BenefitCheckerRequest
      * @return boolean
      */
-    private boolean validateCredentials(BenefitCheckRequestBody inboundWSRequest, ConstraintValidatorContext constraintValidatorContext) {
+    private boolean validateCredentials(BenefitCheckRequestBody inboundWSRequest,
+                                        ConstraintValidatorContext constraintValidatorContext) {
       boolean credentialsOk = true;
 
       // request credentials.
       // SERVICE Context (Case sensitive!)
       String requestServiceName = inboundWSRequest.getLscServiceName();        // e.g. "xx_xxxx"
-      credentialsOk &= BenefitCheckerHelper.validateString(constraintValidatorContext, requestServiceName, "LSCServiceName", BenefiteCheckerConstants.MAX_LEN_SERVICE_CONTEXT, BenefiteCheckerConstants.MAX_LEN_SERVICE_CONTEXT, !BenefiteCheckerConstants.TOLERATE_NULLS);
+      credentialsOk &=
+          BenefitCheckerHelper.validateString(constraintValidatorContext, requestServiceName,
+              "LSCServiceName", BenefiteCheckerConstants.MAX_LEN_SERVICE_CONTEXT,
+              BenefiteCheckerConstants.MAX_LEN_SERVICE_CONTEXT,
+              !BenefiteCheckerConstants.TOLERATE_NULLS);
 
 
       // CLIENT GROUP (aka CLIENT ID Case sensitive!)
-      String requestGroupId = inboundWSRequest.getClientOrgId();                // e.g. "xx_xxxx_xx_xx"
-      credentialsOk &= BenefitCheckerHelper.validateString(constraintValidatorContext, requestGroupId, "ClientOrgId", BenefiteCheckerConstants.MAX_LEN_CLIENT_ORG_ID, BenefiteCheckerConstants.MAX_LEN_CLIENT_ORG_ID, !BenefiteCheckerConstants.TOLERATE_NULLS);
+      String requestGroupId =
+          inboundWSRequest.getClientOrgId();                // e.g. "xx_xxxx_xx_xx"
+      credentialsOk &=
+          BenefitCheckerHelper.validateString(constraintValidatorContext, requestGroupId,
+              "ClientOrgId", BenefiteCheckerConstants.MAX_LEN_CLIENT_ORG_ID,
+              BenefiteCheckerConstants.MAX_LEN_CLIENT_ORG_ID,
+              !BenefiteCheckerConstants.TOLERATE_NULLS);
 
 
       // USERID (Case sensitive!)
-      String requestUserId = inboundWSRequest.getClientUserId();                // e.g. "xx_xxxx_xx_xxxx"
-      credentialsOk &= BenefitCheckerHelper.validateString(constraintValidatorContext, requestUserId, "ClientUserId", BenefiteCheckerConstants.MAX_LEN_CLIENT_USER_ID, BenefiteCheckerConstants.MAX_LEN_CLIENT_USER_ID, !BenefiteCheckerConstants.TOLERATE_NULLS);
+      String requestUserId =
+          inboundWSRequest.getClientUserId();                // e.g. "xx_xxxx_xx_xxxx"
+      credentialsOk &=
+          BenefitCheckerHelper.validateString(constraintValidatorContext, requestUserId,
+              "ClientUserId", BenefiteCheckerConstants.MAX_LEN_CLIENT_USER_ID,
+              BenefiteCheckerConstants.MAX_LEN_CLIENT_USER_ID,
+              !BenefiteCheckerConstants.TOLERATE_NULLS);
 
 
       // What law of Demeter violation? Yes, this is horrible.

@@ -22,11 +22,18 @@ dependencies {
     }
     implementation 'org.openapitools:jackson-databind-nullable:0.2.8'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 sourceSets.main.java.srcDirs += ['generated/src/main/java']
 
 checkstyleMain.exclude "*"
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
 
 openApiGenerate {
     generatorName = "spring"
