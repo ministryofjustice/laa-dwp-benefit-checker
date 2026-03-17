@@ -1,7 +1,13 @@
 package uk.gov.justice.laa.bc.validator;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.contains;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
@@ -11,6 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 
+/**
+ * BenefitCheckerHelperTest.
+ */
 @ExtendWith(MockitoExtension.class)
 public class BenefitCheckerHelperTest {
 
@@ -44,7 +53,8 @@ public class BenefitCheckerHelperTest {
         context, "A", "Surname", 2, 10, true);
 
     assertFalse(result);
-    verify(context).buildConstraintViolationWithTemplate(contains("Error in request parameter 'Surname'"));
+    verify(context).buildConstraintViolationWithTemplate(
+        contains("Error in request parameter 'Surname'"));
   }
 
   @Test
@@ -53,7 +63,8 @@ public class BenefitCheckerHelperTest {
         context, "ABCDEFGHIJK", "Surname", 1, 5, true);
 
     assertFalse(result);
-    verify(context).buildConstraintViolationWithTemplate(contains("Error in request parameter 'Surname'"));
+    verify(context).buildConstraintViolationWithTemplate(
+        contains("Error in request parameter 'Surname'"));
   }
 
   @Test
@@ -93,7 +104,8 @@ public class BenefitCheckerHelperTest {
         context, "2020010", "DateOfBirth", true);
 
     assertFalse(result);
-    verify(context).buildConstraintViolationWithTemplate(contains("Error in request parameter 'DateOfBirth'"));
+    verify(context).buildConstraintViolationWithTemplate(
+        contains("Error in request parameter 'DateOfBirth'"));
   }
 
   @Test

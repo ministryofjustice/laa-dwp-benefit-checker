@@ -1,18 +1,29 @@
 package uk.gov.justice.laa.bc.validator;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 
+/**
+ * BenefitCheckRequestValidatorTest.
+ */
 @ExtendWith(MockitoExtension.class)
 public class BenefitCheckRequestValidatorTest {
 
@@ -65,7 +76,8 @@ public class BenefitCheckRequestValidatorTest {
 
     // simulate each credential field is valid
     helperMock.when(() ->
-        BenefitCheckerHelper.validateString(eq(context), anyString(), anyString(), anyInt(), anyInt(), anyBoolean())
+        BenefitCheckerHelper.validateString(eq(context), anyString(), anyString(), anyInt(),
+            anyInt(), anyBoolean())
     ).thenReturn(true);
 
     boolean result = validator.isValid(request, context);
@@ -82,7 +94,9 @@ public class BenefitCheckRequestValidatorTest {
         .thenReturn(false);
 
     // Credentials valid
-    helperMock.when(() -> BenefitCheckerHelper.validateString(any(), any(), any(), anyInt(), anyInt(), anyBoolean()))
+    helperMock.when(
+            () -> BenefitCheckerHelper.validateString(any(), any(), any(), anyInt(), anyInt(),
+                anyBoolean()))
         .thenReturn(true);
 
     boolean result = validator.isValid(request, context);
@@ -97,7 +111,8 @@ public class BenefitCheckRequestValidatorTest {
 
     // Credentials fail on one field
     helperMock.when(() ->
-        BenefitCheckerHelper.validateString(eq(context), eq("SERVICE"), anyString(), anyInt(), anyInt(), anyBoolean())
+        BenefitCheckerHelper.validateString(eq(context), eq("SERVICE"), anyString(), anyInt(),
+            anyInt(), anyBoolean())
     ).thenReturn(false);
 
     boolean result = validator.isValid(request, context);
