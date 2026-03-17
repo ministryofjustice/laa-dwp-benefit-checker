@@ -4,33 +4,36 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 
+/**
+ * Helper for BenefitCheckRequestValidator.
+ */
 public class BenefitCheckerHelper {
   /**
    * Validate the request Content.
    *
-   * @param inboundWSRequest BenefitCheckerRequest
+   * @param inboundWsRequest BenefitCheckerRequest
    * @return boolean
    */
-  public static boolean validateContent(BenefitCheckRequestBody inboundWSRequest,
+  public static boolean validateContent(BenefitCheckRequestBody inboundWsRequest,
                                         ConstraintValidatorContext constraintValidatorContext) {
 
     boolean retVal = false;
 
     // Main client request params
     boolean nameOk =
-        validateString(constraintValidatorContext, inboundWSRequest.getSurname(), "Surname",
+        validateString(constraintValidatorContext, inboundWsRequest.getSurname(), "Surname",
             BenefiteCheckerConstants.MIN_LEN_SURNAME, BenefiteCheckerConstants.MAX_LEN_SURNAME,
             !BenefiteCheckerConstants.TOLERATE_NULLS);
     boolean refOk =
-        validateString(constraintValidatorContext, inboundWSRequest.getClientReference(),
+        validateString(constraintValidatorContext, inboundWsRequest.getClientReference(),
             "Reference", BenefiteCheckerConstants.MIN_LEN,
             BenefiteCheckerConstants.MAX_LEN_CLIENT_REF, !BenefiteCheckerConstants.TOLERATE_NULLS);
-    boolean ninoOk = validateNino(constraintValidatorContext, inboundWSRequest.getNino());
+    boolean ninoOk = validateNino(constraintValidatorContext, inboundWsRequest.getNino());
     boolean dobOk =
-        validateDate(constraintValidatorContext, inboundWSRequest.getDateOfBirth(), "DateOfBirth",
+        validateDate(constraintValidatorContext, inboundWsRequest.getDateOfBirth(), "DateOfBirth",
             !BenefiteCheckerConstants.TOLERATE_NULLS);
     boolean doaOk =
-        validateDate(constraintValidatorContext, inboundWSRequest.getDateOfAward(), "DateOfAward",
+        validateDate(constraintValidatorContext, inboundWsRequest.getDateOfAward(), "DateOfAward",
             BenefiteCheckerConstants.TOLERATE_NULLS);
 
 
@@ -40,14 +43,13 @@ public class BenefitCheckerHelper {
   }
 
   /**
-   * Validate String property
-   * <p>
+   * Validate String property.
    * check Max length=8 chars
    *
-   * @param propertyValue
-   * @param propertyName
+   * @param propertyValue propertyValue
+   * @param propertyName propertyName
    * @param maxLength     where value is -1 do not impose length check
-   * @param tolerateNull
+   * @param tolerateNull tolerateNull
    * @return boolean
    */
   public static boolean validateString(ConstraintValidatorContext constraintValidatorContext,
@@ -58,15 +60,16 @@ public class BenefitCheckerHelper {
     // check for blank
     if (StringUtils.isEmpty(propertyValue) && !tolerateNull) {
       constraintValidatorContext.buildConstraintViolationWithTemplate(
-              BenefiteCheckerConstants.MSG_CODE_VALIDATION_BLANK + " Missing '" + propertyName + "'")
+              BenefiteCheckerConstants.MSG_CODE_VALIDATION_BLANK
+                  + " Missing '" + propertyName + "'")
           .addConstraintViolation();
     } else {
       // check for max length
-      if ((minLength != -1 & maxLength != -1) &&
-          (propertyValue.length() < minLength || propertyValue.length() > maxLength)) {
+      if ((minLength != -1 & maxLength != -1)
+          && (propertyValue.length() < minLength || propertyValue.length() > maxLength)) {
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-            BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '" +
-                propertyName + "'");
+            BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
+                + propertyName + "'");
       } else {
         retVal = true;
       }
@@ -76,17 +79,16 @@ public class BenefitCheckerHelper {
 
   /**
    * Validate Date property
-   * <p>
    * Format expected to be CCYYMMDD. Max length=8 chars
    *
-   * @param dateString
-   * @param propertyName
+   * @param dateString dateString
+   * @param propertyName propertyName
    * @param tolerateNull - Enforce Null check.
    * @return boolean
    */
   public static boolean validateDate(ConstraintValidatorContext constraintValidatorContext,
                                      String dateString, String propertyName, boolean tolerateNull) {
-//		logger.debug("validateDate()	start");
+    //logger.debug("validateDate() start");
     boolean retVal = true;
 
     // check for blank
@@ -104,30 +106,29 @@ public class BenefitCheckerHelper {
         // check for max length
         if (dateString.length() == BenefiteCheckerConstants.MAX_LEN_DATE) {
           //Potentially could check Date range against known datum < todays date > 20000101
-          // if invalid : throw new ApplicationException(BenefiteCheckerConstants.MSG_CODE_VALIDATION_FORMAT, "Error in request parameter '"+propertyName+"'");
+          // if invalid :
+          // throw new ApplicationException(BenefiteCheckerConstants.MSG_CODE_VALIDATION_FORMAT,
+          // "Error in request parameter '"+propertyName+"'");
 
         } else {
           constraintValidatorContext.buildConstraintViolationWithTemplate(
-              BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '" +
-                  propertyName + "'");
+              BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
+                  + propertyName + "'");
           retVal = false;
         }
       }
     }
-
-//		logger.debug("validateDate()	end '"+propertyName+"'["+retVal+"]");
+    //logger.debug("validateDate() end '"+propertyName+"'["+retVal+"]");
     return retVal;
-
   }
 
   /**
    * Validate the 'nino'
    * Simply check for blanks in a mandatory field.. or length to not exceed
-   * <p>
    * Note:
    * Could use RegEx to check for structure....
    *
-   * @param nationalInsuranceNumber
+   * @param nationalInsuranceNumber nationalInsuranceNumber
    * @return boolean
    */
   public static boolean validateNino(ConstraintValidatorContext constraintValidatorContext,
@@ -148,12 +149,11 @@ public class BenefitCheckerHelper {
 
       } else {
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-            BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE +
-                " Error in 'NI' no. request parameter.");
+            BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE
+                + " Error in 'NI' no. request parameter.");
       }
     }
-
-//		logger.debug("validateNino()	end ["+retVal+"]");
+    //logger.debug("validateNino() end ["+retVal+"]");
     return retVal;
   }
 }

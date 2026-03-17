@@ -28,7 +28,7 @@ dependencies {
 
 sourceSets.main.java.srcDirs += ['generated/src/main/java']
 
-checkstyleMain.exclude "*"
+checkstyleMain.source = "src/main/java"
 
 test {
     useJUnitPlatform()
