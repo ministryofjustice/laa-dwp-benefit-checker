@@ -37,6 +37,19 @@ public @interface BenefitCheckRequestValidation {
    */
   class BenefitCheckRequestValidator implements
       ConstraintValidator<BenefitCheckRequestValidation, BenefitCheckRequestBody> {
+
+    public static final boolean TOLERATE_NULLS = true;
+    public static final int MIN_LEN = 3;
+    public static final int MAX_LEN_NINO = 9;
+    public static final int MIN_LEN_SURNAME = 2;
+    public static final int MAX_LEN_SURNAME = 50;
+    public static final int MAX_LEN_DATE = 8;
+
+    public static final int MAX_LEN_SERVICE_CONTEXT = 7;
+    public static final int MAX_LEN_CLIENT_ORG_ID = 13;
+    public static final int MAX_LEN_CLIENT_USER_ID = 15;
+    public static final int MAX_LEN_CLIENT_REF = 50;
+    
     @Override
     public boolean isValid(BenefitCheckRequestBody benefitCheckRequestBody,
                            ConstraintValidatorContext constraintValidatorContext) {
@@ -64,27 +77,27 @@ public @interface BenefitCheckRequestValidation {
       // SERVICE Context (Case sensitive!)
       String requestServiceName = inboundWsRequest.getLscServiceName();        // e.g. "xx_xxxx"
       credentialsOk &= validateString(constraintValidatorContext, requestServiceName,
-              "LSCServiceName", BenefiteCheckerConstants.MAX_LEN_SERVICE_CONTEXT,
-              BenefiteCheckerConstants.MAX_LEN_SERVICE_CONTEXT,
-              !BenefiteCheckerConstants.TOLERATE_NULLS);
+              "LSCServiceName", MAX_LEN_SERVICE_CONTEXT,
+              MAX_LEN_SERVICE_CONTEXT,
+              !TOLERATE_NULLS);
 
 
       // CLIENT GROUP (aka CLIENT ID Case sensitive!)
       String requestGroupId =
           inboundWsRequest.getClientOrgId();                // e.g. "xx_xxxx_xx_xx"
       credentialsOk &= validateString(constraintValidatorContext, requestGroupId,
-              "ClientOrgId", BenefiteCheckerConstants.MAX_LEN_CLIENT_ORG_ID,
-              BenefiteCheckerConstants.MAX_LEN_CLIENT_ORG_ID,
-              !BenefiteCheckerConstants.TOLERATE_NULLS);
+              "ClientOrgId", MAX_LEN_CLIENT_ORG_ID,
+              MAX_LEN_CLIENT_ORG_ID,
+              !TOLERATE_NULLS);
 
 
       // USERID (Case sensitive!)
       String requestUserId =
           inboundWsRequest.getClientUserId();                // e.g. "xx_xxxx_xx_xxxx"
       credentialsOk &= validateString(constraintValidatorContext, requestUserId,
-              "ClientUserId", BenefiteCheckerConstants.MAX_LEN_CLIENT_USER_ID,
-              BenefiteCheckerConstants.MAX_LEN_CLIENT_USER_ID,
-              !BenefiteCheckerConstants.TOLERATE_NULLS);
+              "ClientUserId", MAX_LEN_CLIENT_USER_ID,
+              MAX_LEN_CLIENT_USER_ID,
+              !TOLERATE_NULLS);
 
 
       // What law of Demeter violation? Yes, this is horrible.
@@ -112,20 +125,20 @@ public @interface BenefitCheckRequestValidation {
       // Main client request params
       boolean nameOk =
           validateString(constraintValidatorContext, inboundWsRequest.getSurname(), "Surname",
-              BenefiteCheckerConstants.MIN_LEN_SURNAME, BenefiteCheckerConstants.MAX_LEN_SURNAME,
-              !BenefiteCheckerConstants.TOLERATE_NULLS);
+              MIN_LEN_SURNAME, MAX_LEN_SURNAME,
+              !TOLERATE_NULLS);
       boolean refOk =
           validateString(constraintValidatorContext, inboundWsRequest.getClientReference(),
-              "Reference", BenefiteCheckerConstants.MIN_LEN,
-              BenefiteCheckerConstants.MAX_LEN_CLIENT_REF,
-              !BenefiteCheckerConstants.TOLERATE_NULLS);
+              "Reference", MIN_LEN,
+              MAX_LEN_CLIENT_REF,
+              !TOLERATE_NULLS);
       boolean ninoOk = validateNino(constraintValidatorContext, inboundWsRequest.getNino());
       boolean dobOk =
           validateDate(constraintValidatorContext, inboundWsRequest.getDateOfBirth(), "DateOfBirth",
-              !BenefiteCheckerConstants.TOLERATE_NULLS);
+              !TOLERATE_NULLS);
       boolean doaOk =
           validateDate(constraintValidatorContext, inboundWsRequest.getDateOfAward(), "DateOfAward",
-              BenefiteCheckerConstants.TOLERATE_NULLS);
+              TOLERATE_NULLS);
 
 
       retVal = nameOk && ninoOk && dobOk && doaOk && refOk;
@@ -151,7 +164,7 @@ public @interface BenefitCheckRequestValidation {
       // check for blank
       if (StringUtils.isEmpty(propertyValue) && !tolerateNull) {
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-                BenefiteCheckerConstants.MSG_CODE_VALIDATION_BLANK
+                ReturnCodes.MSG_CODE_VALIDATION_BLANK
                     + " Missing '" + propertyName + "'")
             .addConstraintViolation();
       } else {
@@ -159,7 +172,7 @@ public @interface BenefitCheckRequestValidation {
         if ((minLength != -1 & maxLength != -1)
             && (propertyValue.length() < minLength || propertyValue.length() > maxLength)) {
           constraintValidatorContext.buildConstraintViolationWithTemplate(
-              BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
+              ReturnCodes.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
                   + propertyName + "'");
         } else {
           retVal = true;
@@ -186,25 +199,25 @@ public @interface BenefitCheckRequestValidation {
       // check for blank
       if (StringUtils.isBlank(dateString) && !tolerateNull) {
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-            BenefiteCheckerConstants.MSG_CODE_VALIDATION_BLANK + " Missing '" + propertyName + "'");
+            ReturnCodes.MSG_CODE_VALIDATION_BLANK + " Missing '" + propertyName + "'");
         retVal = false;
       } else {
 
         if (StringUtils.isBlank(dateString)) {
-          if (!BenefiteCheckerConstants.TOLERATE_NULLS) {
+          if (!TOLERATE_NULLS) {
             retVal = false;
           }
         } else {
           // check for max length
-          if (dateString.length() == BenefiteCheckerConstants.MAX_LEN_DATE) {
+          if (dateString.length() == MAX_LEN_DATE) {
             //Potentially could check Date range against known datum < todays date > 20000101
             // if invalid :
-            // throw new ApplicationException(BenefiteCheckerConstants.MSG_CODE_VALIDATION_FORMAT,
+            // throw new ApplicationException(MSG_CODE_VALIDATION_FORMAT,
             // "Error in request parameter '"+propertyName+"'");
 
           } else {
             constraintValidatorContext.buildConstraintViolationWithTemplate(
-                BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
+                ReturnCodes.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
                     + propertyName + "'");
             retVal = false;
           }
@@ -230,18 +243,18 @@ public @interface BenefitCheckRequestValidation {
       // check for blank
       if (StringUtils.isBlank(nationalInsuranceNumber)) {
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-            BenefiteCheckerConstants.MSG_CODE_VALIDATION_BLANK + " Missing 'NI' no.");
+            ReturnCodes.MSG_CODE_VALIDATION_BLANK + " Missing 'NI' no.");
 
       } else {
 
         // check for max length
-        if (nationalInsuranceNumber.length() == BenefiteCheckerConstants.MAX_LEN_NINO) {
+        if (nationalInsuranceNumber.length() == MAX_LEN_NINO) {
           // Potentially could check RegEx expression - e.g. "[a-zA-Z]{2}[0-9]{6}[a-dA-D]?"
           retVal = true;
 
         } else {
           constraintValidatorContext.buildConstraintViolationWithTemplate(
-              BenefiteCheckerConstants.MSG_CODE_VALIDATION_SIZE
+              ReturnCodes.MSG_CODE_VALIDATION_SIZE
                   + " Error in 'NI' no. request parameter.");
         }
       }

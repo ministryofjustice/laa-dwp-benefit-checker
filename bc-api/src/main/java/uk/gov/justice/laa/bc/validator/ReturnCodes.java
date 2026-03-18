@@ -1,63 +1,9 @@
 package uk.gov.justice.laa.bc.validator;
 
-
 /**
- * Benefit Checker application wide Constants interface.
- *
- * @author LING-G
+ * ReturnCodes.
  */
-public class BenefiteCheckerConstants {
-  // BenefitChecker config properties.
-
-  public static final String CONFIG_SVR_CONTEXT = "CREDENTIALS_SERVICE_CONTEXT";
-  public static final String CONFIG_CLIENT_IDS = "CLIENT_IDS";
-
-  public static final int REQUEST = 10;
-  public static final int RESPONSE = 20;
-  public static final int EXCEPTION = 30;
-
-  public static final boolean TOLERATE_NULLS = true;
-
-
-  // Configuration property values
-  public static final String PROP_NAME_DWP_URL = "DWP_SERVICE_NAME";
-  public static final String DWP_CALL_FLAG = "DWP_CALL_FLAG";
-
-  public static final String DWP_SERVICE_TIMEOUT = "lsc.benefitchecker.dwp.service.timeout";
-  public static final String DWP_SERVICE_TESTMODE = "lsc.benefitchecker.dwp.service.test";
-  // DWP service response status values....
-  // Note. Why are these not provided by the DWPObj.jar (DWP Client)
-  // WARNING - These values are presented on the public interface
-  //         - consider the impact to clients (MAAT, SLAG, NILSC etc) if changed.
-  public static final String DWP_STATUS_ERROR = "Technical fault";
-  public static final String DWP_STATUS_YES = "Yes";
-  public static final String DWP_STATUS_NO = "No";
-  public static final String DWP_STATUS_UNDETERMINED = "Undetermined";
-  public static final String DWP_STATUS_DECEASED = "Deceased";
-  public static final String DWP_STATUS_DELETED = "Deleted";
-  public static final String DWP_STATUS_SUPERSEDED = "Superseded";
-
-
-  public static final String MSG_DESC_VALIDATION_CREDENTIALS = "Invalid request credentials.";
-  public static final String MSG_DESC_REQUEST_TIMED_OUT = "Request timed out.";
-  public static final String MSG_DESC_REQUEST_TIMEOUT = "DWP Service has timed out";
-
-  public static final int MIN_LEN = 3;
-  public static final int MAX_LEN_NINO = 9;
-  public static final int MIN_LEN_SURNAME = 2;
-  public static final int MAX_LEN_SURNAME = 50;
-  public static final int MAX_LEN_DATE = 8;
-
-  public static final int MAX_LEN_SERVICE_CONTEXT = 7;
-  public static final int MAX_LEN_CLIENT_ORG_ID = 13;
-  public static final int MAX_LEN_CLIENT_USER_ID = 15;
-  public static final int MAX_LEN_CLIENT_REF = 50;
-
-
-  // used in the event that DWP response status handling error
-  public static final String DWP_SERVICE_UNAVAILABLE_MSG =
-      "lsc.benefitchecker.dwp.service.exception.message";
-
+public class ReturnCodes {
   // LSCBC1nn series : ** Not used at present **
 
   // LSCBC2nn series : Public api faults
@@ -108,5 +54,4 @@ public class BenefiteCheckerConstants {
   // Internal Runtime failure occured
   public static final String MSG_CODE_FATAL_THROWABLE = "LSCBC999";
   // Internal Throwable detected..
-
 }
