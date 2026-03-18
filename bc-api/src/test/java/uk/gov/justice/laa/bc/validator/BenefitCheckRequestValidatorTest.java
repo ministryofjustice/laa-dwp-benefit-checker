@@ -2,22 +2,16 @@ package uk.gov.justice.laa.bc.validator;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.contains;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
 
 import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.ConstraintValidatorContext.ConstraintViolationBuilder;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 
@@ -28,138 +22,173 @@ import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 public class BenefitCheckRequestValidatorTest {
 
   private BenefitCheckRequestValidation.BenefitCheckRequestValidator validator;
-  private ConstraintValidatorContext context;
-  private ConstraintViolationBuilder builder;
-
-  private BenefitCheckRequestBody request;
-
-  private MockedStatic<BenefitCheckerHelper> helperMock;
+  private ConstraintValidatorContext ctx;
+  private ConstraintValidatorContext.ConstraintViolationBuilder builder;
 
   @BeforeEach
   void setup() {
     validator = new BenefitCheckRequestValidation.BenefitCheckRequestValidator();
+    ctx = mock(ConstraintValidatorContext.class);
+    builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
 
-    context = mock(ConstraintValidatorContext.class);
-    builder = mock(ConstraintViolationBuilder.class);
-    lenient().when(context.buildConstraintViolationWithTemplate(anyString()))
-        .thenReturn(builder);
-    lenient().when(builder.addConstraintViolation()).thenReturn(context);
+    // Default behaviour for any violation
+    lenient().when(ctx.buildConstraintViolationWithTemplate(anyString())).thenReturn(builder);
+  }
 
-    request = new BenefitCheckRequestBody();
+  private BenefitCheckRequestBody validRequest() {
+    BenefitCheckRequestBody request = new BenefitCheckRequestBody();
     request.setLscServiceName("SERVICE");
-    request.setClientOrgId("ORG_123");
-    request.setClientUserId("USER_123");
+    request.setClientOrgId("ab_orgc_12_34");
+    request.setClientUserId("cl_user_id_1234");
     request.setSurname("Doe");
     request.setClientReference("ABC123");
     request.setNino("AB123456C");
     request.setDateOfBirth("19900101");
     request.setDateOfAward("20200101");
-
-    helperMock = mockStatic(BenefitCheckerHelper.class);
+    return request;
   }
 
-  @AfterEach
-  void tearDown() {
-    helperMock.close();
-  }
-
-  // -------------------------------------------------------
-  // isValid()
-  // -------------------------------------------------------
+  // ---------------------------------------------------------------------
+  // TOP-LEVEL VALIDATOR TESTS
+  // ---------------------------------------------------------------------
 
   @Test
-  void isValid_shouldReturnTrue_whenCredentialsAndContentValid() {
+  void validRequest_returnsTrue() {
+    BenefitCheckRequestBody req = validRequest();
 
-    // simulate content valid
-    helperMock.when(() -> BenefitCheckerHelper.validateContent(eq(request), any()))
-        .thenReturn(true);
+    boolean result = validator.isValid(req, ctx);
+    assertTrue(result);
+  }
 
-    // simulate each credential field is valid
-    helperMock.when(() ->
-        BenefitCheckerHelper.validateString(eq(context), anyString(), anyString(), anyInt(),
-            anyInt(), anyBoolean())
-    ).thenReturn(true);
+  @Test
+  void missingSurname_makesContentInvalid() {
+    BenefitCheckRequestBody req = validRequest();
+    req.setSurname("");
 
-    boolean result = validator.isValid(request, context);
+    boolean result = validator.isValid(req, ctx);
+
+    assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(contains("Missing 'Surname'"));
+  }
+
+  @Test
+  void missingServiceName_makesCredentialsInvalid() {
+    BenefitCheckRequestBody req = validRequest();
+    req.setLscServiceName("");
+
+    boolean result = validator.isValid(req, ctx);
+
+    assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(contains("LSCServiceName"));
+  }
+
+  // ---------------------------------------------------------------------
+  // validateString()
+  // ---------------------------------------------------------------------
+
+  @Test
+  void validateString_validValue_returnsTrue() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateString(
+        ctx, "ABC", "TestField", 1, 5, false
+    );
 
     assertTrue(result);
-    helperMock.verify(() -> BenefitCheckerHelper.validateContent(request, context));
-    helperMock.verify(() -> BenefitCheckerHelper.validateString(eq(context), eq("SERVICE"),
-        eq("LSCServiceName"), anyInt(), anyInt(), anyBoolean()));
   }
 
   @Test
-  void isValid_shouldReturnFalse_whenContentInvalid() {
-    helperMock.when(() -> BenefitCheckerHelper.validateContent(eq(request), any()))
-        .thenReturn(false);
-
-    // Credentials valid
-    helperMock.when(
-            () -> BenefitCheckerHelper.validateString(any(), any(), any(), anyInt(), anyInt(),
-                anyBoolean()))
-        .thenReturn(true);
-
-    boolean result = validator.isValid(request, context);
+  void validateString_blankWhenNotAllowed_returnsFalse() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateString(
+        ctx, "", "TestField", 1, 5, false
+    );
 
     assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(contains("Missing 'TestField'"));
   }
 
   @Test
-  void isValid_shouldReturnFalse_whenCredentialsInvalid() {
-    helperMock.when(() -> BenefitCheckerHelper.validateContent(eq(request), any()))
-        .thenReturn(true);
-
-    // Credentials fail on one field
-    helperMock.when(() ->
-        BenefitCheckerHelper.validateString(eq(context), eq("SERVICE"), anyString(), anyInt(),
-            anyInt(), anyBoolean())
-    ).thenReturn(false);
-
-    boolean result = validator.isValid(request, context);
+  void validateString_lengthTooShort_returnsFalse() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateString(
+        ctx, "A", "TestField", 3, 5, false
+    );
 
     assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(
+        contains("Error in request parameter 'TestField'"));
   }
 
   @Test
-  void isValid_shouldReturnFalse_whenBothContentAndCredentialsInvalid() {
-    helperMock.when(() -> BenefitCheckerHelper.validateContent(eq(request), any()))
-        .thenReturn(false);
-
-    helperMock.when(() ->
-        BenefitCheckerHelper.validateString(any(), any(), any(), anyInt(), anyInt(), anyBoolean())
-    ).thenReturn(false);
-
-    boolean result = validator.isValid(request, context);
+  void validateString_lengthTooLong_returnsFalse() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateString(
+        ctx, "TOO_LONG_VALUE", "TestField", 1, 5, false
+    );
 
     assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(
+        contains("Error in request parameter 'TestField'"));
   }
 
-  // -------------------------------------------------------
-  // validateCredentials() indirectly via static mocks
-  // -------------------------------------------------------
+  // ---------------------------------------------------------------------
+  // validateDate()
+  // ---------------------------------------------------------------------
 
   @Test
-  void validateCredentials_shouldCallValidateStringForAllCredentialFields() {
-    // Make all return true
-    helperMock.when(() -> BenefitCheckerHelper.validateContent(request, context))
-        .thenReturn(true);
+  void validateDate_validLength_returnsTrue() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateDate(
+        ctx, "20240101", "DateOfBirth", false
+    );
 
-    helperMock.when(() ->
-        BenefitCheckerHelper.validateString(any(), any(), any(), anyInt(), anyInt(), anyBoolean())
-    ).thenReturn(true);
+    assertTrue(result);
+  }
 
-    validator.isValid(request, context);
+  @Test
+  void validateDate_missingWhenRequired_returnsFalse() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateDate(
+        ctx, "", "DateOfBirth", false
+    );
 
-    helperMock.verify(() ->
-        BenefitCheckerHelper.validateString(eq(context), eq("SERVICE"),
-            eq("LSCServiceName"), anyInt(), anyInt(), anyBoolean()));
+    assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(contains("Missing 'DateOfBirth'"));
+  }
 
-    helperMock.verify(() ->
-        BenefitCheckerHelper.validateString(eq(context), eq("ORG_123"),
-            eq("ClientOrgId"), anyInt(), anyInt(), anyBoolean()));
+  @Test
+  void validateDate_wrongLength_returnsFalse() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateDate(
+        ctx, "20241", "DateOfBirth", false
+    );
 
-    helperMock.verify(() ->
-        BenefitCheckerHelper.validateString(eq(context), eq("USER_123"),
-            eq("ClientUserId"), anyInt(), anyInt(), anyBoolean()));
+    assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(
+        contains("Error in request parameter 'DateOfBirth'"));
+  }
+
+  // ---------------------------------------------------------------------
+  // validateNino()
+  // ---------------------------------------------------------------------
+
+  @Test
+  void validateNino_valid_returnsTrue() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateNino(
+        ctx, "AB123456C"
+    );
+    assertTrue(result);
+  }
+
+  @Test
+  void validateNino_blank_returnsFalse() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateNino(
+        ctx, ""
+    );
+    assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(contains("Missing 'NI' no."));
+  }
+
+  @Test
+  void validateNino_wrongLength_returnsFalse() {
+    boolean result = BenefitCheckRequestValidation.BenefitCheckRequestValidator.validateNino(
+        ctx, "SHORT"
+    );
+    assertFalse(result);
+    verify(ctx).buildConstraintViolationWithTemplate(
+        contains("Error in 'NI' no. request parameter."));
   }
 }
