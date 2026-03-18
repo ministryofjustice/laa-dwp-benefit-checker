@@ -57,7 +57,9 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: test-report
-          path: bc-service/build/reports/tests
+          path: |
+            bc-service/build/reports/tests
+            bc-api/build/reports/tests
           retention-days: 14
 
       - name: Upload jacoco coverage report
@@ -65,7 +67,9 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: jacoco-coverage-report
-          path: bc-service/build/reports/jacoco/*/jacocoTestReport.xml
+          path: |
+            bc-service/build/reports/jacoco/*/jacocoTestReport.xml
+            bc-api/build/reports/jacoco/*/jacocoTestReport.xml
           retention-days: 14
 
   vulnerability-scan-app:
