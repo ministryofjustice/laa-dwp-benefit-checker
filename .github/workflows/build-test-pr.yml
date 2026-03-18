@@ -34,6 +34,9 @@ jobs:
       - name: Integration test
         run: ./gradlew integrationTest --tests '*IntegrationTest'
 
+      - name: checkstyle test
+        run: ./gradlew checkstyleTest
+
       - name: Publish package
         run: ./gradlew publish
         env:
@@ -44,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: checkstyle-report
-          path: bc-service/build/reports/checkstyle/main.html
+          path: bc-service/build/reports/checkstyle/*.html
           retention-days: 14
 
       - name: Upload test report
