@@ -26,6 +26,8 @@ project.ext.gitPackageUser = <your GitHub username>
 project.ext.gitPackageKey = <your GitHub access token>
 ```
 
+
+
 For more detailed instructions, refer to the laa-ccms-spring-boot-common repository [here](https://github.com/ministryofjustice/laa-ccms-spring-boot-common?tab=readme-ov-file).
 
 More information on GDS can be found [here](https://gds-way.digital.cabinet-office.gov.uk/).
