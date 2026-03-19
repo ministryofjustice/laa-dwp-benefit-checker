@@ -9,7 +9,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
+import uk.gov.justice.laa.bc.model.Configuration;
+import uk.gov.justice.laa.bc.service.ConfigurationService;
 
 /**
  * Custom validator for BenefitCheckRequest.
@@ -37,6 +40,9 @@ public @interface BenefitCheckRequestValidation {
    */
   class BenefitCheckRequestValidator implements
       ConstraintValidator<BenefitCheckRequestValidation, BenefitCheckRequestBody> {
+
+    @Autowired
+    private ConfigurationService configurationService;
 
     public static final boolean TOLERATE_NULLS = true;
     public static final int MIN_LEN = 3;
@@ -106,7 +112,7 @@ public @interface BenefitCheckRequestValidation {
       // .getServletContext().getAttribute(Configuration.KEY);
 
       // We have the credentials, know perform the back end security check using them
-      //credentialsOk = performSecurityCheck(inboundWSRequest, config);
+      credentialsOk &= performSecurityCheck(constraintValidatorContext, inboundWsRequest);
 
       return credentialsOk;
     }
@@ -260,6 +266,26 @@ public @interface BenefitCheckRequestValidation {
       }
       //logger.debug("validateNino() end ["+retVal+"]");
       return retVal;
+    }
+
+    /**
+     * Check authorisation for inbound Benefit Check Request.
+     * Use the Clients credentials embedded in the request message.
+     * <p>
+     * Note: The credentials are compared against those defined in the configuration of this service.
+     * At present this is an application properties file.
+     * In future releases this will be changed to a better more extensible external solution (LDAP via the common code).
+     *
+     * @param inboundWSRequest
+     * @return boolean
+     */
+    private boolean performSecurityCheck(ConstraintValidatorContext constraintValidatorContext, BenefitCheckRequestBody inboundWSRequest) {
+
+      String requestGroupId = inboundWSRequest.getClientOrgId();            // i.g. "xx_xxxx_xx_xx"
+      String requestServiceName = inboundWSRequest.getLscServiceName();     // i.g. "xx_xxxx"
+      String requestUserId = inboundWSRequest.getClientUserId();            // i.g. "xx_xxxx_xx_xxxx"
+
+      return configurationService.containsScopedPrincipal(constraintValidatorContext, requestServiceName, requestGroupId, requestUserId);
     }
   }
 }
