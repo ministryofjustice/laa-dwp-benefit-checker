@@ -36,6 +36,7 @@ paths:
 components:
   schemas:
     BenefitCheckRequestBody:
+      x-class-extra-annotation: '@uk.gov.justice.laa.bc.validator.BenefitCheckRequestValidation'
       required:
         - clientReference
         - nino

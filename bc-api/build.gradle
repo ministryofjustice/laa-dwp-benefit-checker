@@ -21,11 +21,48 @@ dependencies {
         }
     }
     implementation 'org.openapitools:jackson-databind-nullable:0.2.8'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 sourceSets.main.java.srcDirs += ['generated/src/main/java']
 
-checkstyleMain.exclude "*"
+checkstyleMain.source = "src/main/java"
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/lsc',
+                    '**/dwp',
+                    '**/model',
+                    '**/api'
+            ])
+        }))
+    }
+    reports {
+        xml.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/lsc',
+                    '**/dwp',
+                    '**/model',
+                    '**/api'
+            ])
+        }))
+    }
+}
 
 openApiGenerate {
     generatorName = "spring"

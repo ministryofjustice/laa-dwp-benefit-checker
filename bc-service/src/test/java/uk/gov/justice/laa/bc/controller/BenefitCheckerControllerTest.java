@@ -35,14 +35,14 @@ class BenefitCheckerControllerTest {
 
     BenefitCheckRequestBody request =
             BenefitCheckRequestBody.builder()
-                    .clientReference("clientReference")
-                    .nino("nino")
-                    .dateOfAward("211226")
-                    .dateOfBirth("171226")
-                    .clientUserId("user")
-                    .clientOrgId("org")
-                    .lscServiceName("a")
-                    .surname("smith")
+                    .clientReference("ABC123")
+                    .nino("AB123456C")
+                    .dateOfAward("20200101")
+                    .dateOfBirth("19900101")
+                    .clientUserId("cl_user_id_1234")
+                    .clientOrgId("ab_orgc_12_34")
+                    .lscServiceName("SERVICE")
+                    .surname("Doe")
                     .build();
 
     BenefitCheckResponseBody expectedResponse = BenefitCheckResponseBody.builder()

@@ -27,16 +27,16 @@ public class BenefitCheckerControllerIntegrationTest {
   void shouldCreateItem() throws Exception {
 
     BenefitCheckRequestBody request =
-            BenefitCheckRequestBody.builder()
-                    .clientReference("clientReference")
-                    .nino("nino")
-                    .dateOfAward("211226")
-                    .dateOfBirth("171226")
-                    .clientUserId("user")
-                    .clientOrgId("org")
-                    .lscServiceName("a")
-                    .surname("smith")
-                    .build();
+        BenefitCheckRequestBody.builder()
+            .clientReference("ABC123")
+            .nino("AB123456C")
+            .dateOfAward("20200101")
+            .dateOfBirth("19900101")
+            .clientUserId("cl_user_id_1234")
+            .clientOrgId("ab_orgc_12_34")
+            .lscServiceName("SERVICE")
+            .surname("Doe")
+            .build();
 
     mockMvc
         .perform(
@@ -45,6 +45,30 @@ public class BenefitCheckerControllerIntegrationTest {
                 .content(toJson(request))
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  void shouldReturn400WhenValidateFail() throws Exception {
+
+    BenefitCheckRequestBody request =
+        BenefitCheckRequestBody.builder()
+            .clientReference("ABC123")
+            .nino("AB123456C")
+            .dateOfAward("20200101")
+            .dateOfBirth("19900101")
+            .clientUserId("cl_user_id_1234")
+            .clientOrgId("errorOrgId")
+            .lscServiceName("SERVICE")
+            .surname("Doe")
+            .build();
+
+    mockMvc
+        .perform(
+            post("/api/v1/benefitsCheck")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().is4xxClientError());
   }
 
   @SneakyThrows
