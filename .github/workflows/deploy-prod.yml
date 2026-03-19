@@ -20,6 +20,8 @@ jobs:
       contents: read
 
     steps:
+      - uses: actions/checkout@v5
+
       - name: Deploy
         id: deploy_to_prod
         uses: ./.github/actions/deploy_image
