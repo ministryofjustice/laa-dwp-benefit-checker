@@ -1,0 +1,18 @@
+{{- if .Values.actuator.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "laa-benefit-checker-interim.fullname" .  }}-monitoring
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "laa-benefit-checker-interim.selectorLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.namespace }}
+  endpoints:
+    - port: {{ .Values.actuator.metrics.port }}
+      interval: {{ .Values.actuator.metrics.scrapeInterval }}
+      path: {{ .Values.actuator.metrics.path }}
+{{- end }}
