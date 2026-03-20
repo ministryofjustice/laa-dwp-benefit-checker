@@ -3,9 +3,7 @@ plugins {
     id 'uk.gov.laa.springboot.laa-spring-boot-gradle-plugin'
     id "com.github.bjornvester.xjc" version "1.9.0"
 }
-ext {
-    set('spring-framework.version', '7.0.6')
-}
+
 checkstyleMain.source = "src/main/java"
 
 java {
