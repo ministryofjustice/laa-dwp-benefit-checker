@@ -134,3 +134,32 @@ jobs:
           kube-cluster: ${{ secrets.KUBE_CLUSTER }}
           kube-namespace: ${{ secrets.KUBE_NAMESPACE }}
           app-environment: uat
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs:
+      - build-push-docker
+      - vulnerability-scan-app
+      - vulnerability-scan-docker
+    environment: uat
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Deploy production
+        id: deploy_prod_branch
+        uses: ./.github/actions/deploy
+        with:
+          ecr-region: ${{ vars.ECR_REGION }}
+          ecr-role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
+          ecr-repository: ${{ vars.ECR_REPOSITORY }}
+          kube-cert: ${{ secrets.KUBE_CERT }}
+          kube-token: ${{ secrets.KUBE_TOKEN }}
+          kube-cluster: ${{ secrets.KUBE_CLUSTER }}
+          kube-namespace: ${{ secrets.KUBE_NAMESPACE }}
+          app-environment: production
