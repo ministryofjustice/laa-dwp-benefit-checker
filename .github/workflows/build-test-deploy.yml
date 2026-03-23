@@ -5,7 +5,7 @@ on:
   pull_request:
   push:
     branches:
-      - LAA-CONNECT-1308
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
