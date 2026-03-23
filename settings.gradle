@@ -13,13 +13,13 @@ pluginManagement {
     }
 
     plugins {
-        id 'uk.gov.laa.springboot.laa-spring-boot-gradle-plugin' version '2.0.8'
+        id 'uk.gov.laa.springboot.laa-spring-boot-gradle-plugin' version '2.1.6'
         id 'org.openapi.generator' version '7.18.0'
         id 'io.freefair.lombok' version '9.1.0'
     }
 }
 
-rootProject.name = 'laa-dwp-benefit-checker'
+rootProject.name = 'laa-dwp-benefit-checker-2.0'
 
 include 'bc-api'
 include 'bc-service'
