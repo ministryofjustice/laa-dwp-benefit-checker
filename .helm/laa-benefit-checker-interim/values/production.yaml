@@ -49,3 +49,6 @@ sentry:
 
 spring:
   profile: production
+
+aws:
+  region: eu-west-2
