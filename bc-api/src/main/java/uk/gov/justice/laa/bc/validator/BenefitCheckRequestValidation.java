@@ -73,6 +73,7 @@ public @interface BenefitCheckRequestValidation {
      * with IP filtering and HTTPS certification to provide adequate authenicatation security.
      *
      * @param inboundWsRequest BenefitCheckerRequest
+     * @param constraintValidatorContext ConstraintValidatorContext
      * @return boolean
      */
     private boolean validateCredentials(BenefitCheckRequestBody inboundWsRequest,
@@ -271,21 +272,27 @@ public @interface BenefitCheckRequestValidation {
     /**
      * Check authorisation for inbound Benefit Check Request.
      * Use the Clients credentials embedded in the request message.
-     * <p>
-     * Note: The credentials are compared against those defined in the configuration of this service.
+     * Note: The credentials are compared against those
+     * defined in the configuration of this service.
      * At present this is an application properties file.
-     * In future releases this will be changed to a better more extensible external solution (LDAP via the common code).
+     * In future releases this will be changed to a
+     * better more extensible external solution (LDAP via the common code).
      *
-     * @param inboundWSRequest
+     * @param inboundWsRequest inboundWsRequest
      * @return boolean
      */
-    private boolean performSecurityCheck(ConstraintValidatorContext constraintValidatorContext, BenefitCheckRequestBody inboundWSRequest) {
+    private boolean performSecurityCheck(ConstraintValidatorContext constraintValidatorContext,
+                                         BenefitCheckRequestBody inboundWsRequest) {
 
-      String requestGroupId = inboundWSRequest.getClientOrgId();            // i.g. "xx_xxxx_xx_xx"
-      String requestServiceName = inboundWSRequest.getLscServiceName();     // i.g. "xx_xxxx"
-      String requestUserId = inboundWSRequest.getClientUserId();            // i.g. "xx_xxxx_xx_xxxx"
+      // i.g. "xx_xxxx_xx_xx"
+      String requestGroupId = inboundWsRequest.getClientOrgId();
+      // i.g. "xx_xxxx"
+      String requestServiceName = inboundWsRequest.getLscServiceName();
+      // i.g. "xx_xxxx_xx_xxxx"
+      String requestUserId = inboundWsRequest.getClientUserId();
 
-      return configurationService.containsScopedPrincipal(constraintValidatorContext, requestServiceName, requestGroupId, requestUserId);
+      return configurationService.containsScopedPrincipal(
+          constraintValidatorContext, requestServiceName, requestGroupId, requestUserId);
     }
   }
 }

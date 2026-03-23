@@ -10,10 +10,7 @@ import java.util.stream.Stream;
 
 /**
  * Configuration is an immutable class for handling client org definitions.
- * <p>
  * We have a grammar defining how we parse client org definitions:
- * <p>
- * <p>
  * client-definitions = client-definition [ { ";" client-definition } ] ;
  * client-definition  = org-id [ ":" user-ids ] ;
  * org-id             = 13 * character ;
@@ -25,8 +22,6 @@ import java.util.stream.Stream;
  * upper              = "A" ... "Z" ;
  * lower              = "a" ... "z" ;
  * allowed-char       = "_" ;
- *
- * <p>
  * This is marginally better than the existing thing and means I can deploy
  * a thing to production as part of this cutover weekend which won't break
  * existing clients, and allow me to define the deployment in code for all
@@ -34,51 +29,59 @@ import java.util.stream.Stream;
  */
 public class Configuration {
 
-    public static final String KEY = Configuration.class.getName();
+  public static final String KEY = Configuration.class.getName();
 
-    private String serviceName;
+  private final String serviceName;
 
-    private Map<String, ClientOrg> clientOrgs;
+  private final Map<String, ClientOrg> clientOrgs;
 
-    private Configuration(String serviceName, Map<String, ClientOrg> clientOrgs) {
-        this.serviceName = serviceName;
-        this.clientOrgs = clientOrgs;
+  private Configuration(String serviceName, Map<String, ClientOrg> clientOrgs) {
+    this.serviceName = serviceName;
+    this.clientOrgs = clientOrgs;
+  }
+
+  /**
+   * parse string to Configuration.
+   *
+   * @param serviceName String
+   * @param clientDefinitions String
+   * @return Configuration
+   */
+  public static Configuration parse(String serviceName, String clientDefinitions) {
+    if (serviceName == null) {
+      throw new IllegalArgumentException("Service Name cannot be null");
     }
 
-    public String getServiceName() {
-        return this.serviceName;
+    // Lazy : using a LinkedHashMap for predictable ordering in the tests.
+    // We don't need that guarantee otherwise.
+    Map<String, ClientOrg> clientOrgs = new LinkedHashMap<>();
+
+    if (clientDefinitions != null) {
+      String[] clientDefns = clientDefinitions.split(";");
+      for (String clientDefn : getNonNullStream(clientDefns).filter(Objects::nonNull)
+          .collect(Collectors.toList())) {
+        ClientOrg org = ClientOrg.parse(clientDefn);
+        clientOrgs.put(org.getOrgId(), org);
+      }
     }
 
-    public Map<String, ClientOrg> getClientOrgs() {
-        return this.clientOrgs;
+    return new Configuration(serviceName, clientOrgs);
+  }
+
+  private static Stream<String> getNonNullStream(String[] clientDefinitions) {
+    if (clientDefinitions == null) {
+      return Stream.empty();
     }
+    return Arrays.stream(clientDefinitions);
+  }
 
-    public static Configuration parse(String serviceName, String clientDefinitions) {
-        if (serviceName == null) {
-            throw new IllegalArgumentException("Service Name cannot be null");
-        }
+  public String getServiceName() {
+    return this.serviceName;
+  }
 
-        // Lazy : using a LinkedHashMap for predictable ordering in the tests.
-        // We don't need that guarantee otherwise.
-        Map<String, ClientOrg> clientOrgs = new LinkedHashMap<>();
-
-        if (clientDefinitions != null) {
-            String[] clientDefns = clientDefinitions.split(";");
-            for (String clientDefn : getNonNullStream(clientDefns).filter(Objects::nonNull).collect(Collectors.toList())) {
-                ClientOrg org = ClientOrg.parse(clientDefn);
-                clientOrgs.put(org.getOrgId(), org);
-            }
-        }
-
-        return new Configuration(serviceName, clientOrgs);
-    }
-
-    private static Stream<String> getNonNullStream(String[] clientDefinitions) {
-        if (clientDefinitions == null) {
-            return Stream.empty();
-        }
-        return Arrays.stream(clientDefinitions);
-    }
+  public Map<String, ClientOrg> getClientOrgs() {
+    return this.clientOrgs;
+  }
 
 
 }
