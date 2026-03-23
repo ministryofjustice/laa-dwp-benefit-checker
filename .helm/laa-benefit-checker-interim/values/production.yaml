@@ -46,3 +46,9 @@ sentry:
   enabled: true
   environment: production
   tracesSampleRate: 1
+
+spring:
+  profile: production
+
+aws:
+  region: eu-west-2
