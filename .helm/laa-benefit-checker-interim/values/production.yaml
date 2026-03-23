@@ -46,3 +46,6 @@ sentry:
   enabled: true
   environment: production
   tracesSampleRate: 1
+
+spring:
+  profile: production
