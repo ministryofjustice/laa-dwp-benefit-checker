@@ -19,7 +19,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'laa-dwp-benefit-checker-2.0'
+rootProject.name = 'laa-dwp-benefit-checker'
 
 include 'bc-api'
 include 'bc-service'
