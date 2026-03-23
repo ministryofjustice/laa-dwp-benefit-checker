@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "laa-benefit-checker-interim" .  }}-monitoring
+  name: {{ include "laa-benefit-checker-interim.fullname" .  }}-monitoring
   labels:
     {{ include "laa-benefit-checker-interim.labels" . | nindent 4 }}
 spec:
