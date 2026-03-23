@@ -3,14 +3,14 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "laa-benefit-checker-interim.fullname" .  }}-monitoring
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   selector:
     matchLabels:
       {{- include "laa-benefit-checker-interim.selectorLabels" . | nindent 6 }}
   namespaceSelector:
     matchNames:
-      - {{ .Values.namespace }}
+      - {{ .Values.namespace | default .Release.Namespace }}
   endpoints:
     - port: {{ .Values.actuator.metrics.port }}
       interval: {{ .Values.actuator.metrics.scrapeInterval }}
