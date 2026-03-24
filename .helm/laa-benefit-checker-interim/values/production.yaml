@@ -19,18 +19,18 @@ ingress:
   className: modsec-non-prod
   environmentName: laa-benefit-checker-interim-production
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-production-laa-benefit-checker-interim-production-green"
+    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-laa-benefit-checker-interim-prod-green"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     nginx.ingress.kubernetes.io/enable-modsecurity: "true"
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       SecRuleEngine On
       SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:tx.allowed_methods=GET HEAD POST OPTIONS PUT PATCH DELETE"
-      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-data-stewardship-access-team,tag:namespace=laa-benefit-checker-interim-production"
+      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-access-court-data,tag:namespace=laa-benefit-checker-interim-prod"
   internalHost:
-    host: "laa-benefit-checker-interim-production.apps.live.cloud-platform.service.justice.gov.uk"
+    host: "laa-benefit-checker-interim.apps.live.cloud-platform.service.justice.gov.uk"
     path: /
   externalHost:
-    host: "laa-benefit-checker-interim-production.apps.live.cloud-platform.service.justice.gov.uk"
+    host: "laa-benefit-checker-interim.apps.live.cloud-platform.service.justice.gov.uk"
     paths:
       swaggerPath: /open-api/swagger-ui
       openApiPath: /open-api/api-docs
