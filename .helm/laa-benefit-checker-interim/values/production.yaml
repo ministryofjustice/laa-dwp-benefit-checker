@@ -19,7 +19,7 @@ ingress:
   className: modsec-non-prod
   environmentName: laa-benefit-checker-interim-production
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-laa-benefit-checker-interim-prod-green"
+    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-external-laa-benefit-checker-interim-prod-green"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     nginx.ingress.kubernetes.io/enable-modsecurity: "true"
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
