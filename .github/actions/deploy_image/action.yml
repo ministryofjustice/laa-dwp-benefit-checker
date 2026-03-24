@@ -73,5 +73,7 @@ runs:
           --set image.tag="${DOCKER_IMAGE}" \
           --values ${VALUES_FILE} \
           --install \
-          --wait \
-          --timeout 10m
+          --timeout 15m
+
+        echo "Waiting for deployment to be ready..."
+        kubectl rollout status deployment/laa-benefit-checker-interim -n ${KUBE_NAMESPACE} --timeout=15m
