@@ -62,6 +62,7 @@ rm -rf build .gradle
 ./gradlew jacocoTestReport
 ./gradlew jacocoTestCoverageVerification
 
+kubectl get pod -n laa-benefit-checker-interim-prod
 kubectl get pods -n laa-benefit-checker-interim-uat
 helm upgrade --install <name-of-service-as-defined-in-helm-chart> -f <path-to-values-files.yaml> --namespace=<cluster-namespace>
 helm upgrade --install laa-benefit-checker-interim -f laa-benefit-checker-interim-uat/values/development.yaml --namespace=laa-benefit-checker-interim-uat laa-benefit-checker-interim-uat
