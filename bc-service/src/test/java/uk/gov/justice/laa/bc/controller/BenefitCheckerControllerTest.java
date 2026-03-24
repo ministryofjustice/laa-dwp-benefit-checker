@@ -2,6 +2,8 @@ package uk.gov.justice.laa.bc.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
 import uk.gov.justice.laa.bc.service.BenefitCheckerService;
+import uk.gov.justice.laa.bc.service.ConfigurationService;
 
 @WebMvcTest(uk.gov.justice.laa.bc.controller.BenefitCheckerController.class)
 class BenefitCheckerControllerTest {
@@ -27,6 +30,8 @@ class BenefitCheckerControllerTest {
 
   @MockitoBean
   private BenefitCheckerService mockBenefitCheckerService;
+  @MockitoBean
+  private ConfigurationService mockConfigurationService;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -41,7 +46,7 @@ class BenefitCheckerControllerTest {
                     .dateOfBirth("19900101")
                     .clientUserId("cl_user_id_1234")
                     .clientOrgId("ab_orgc_12_34")
-                    .lscServiceName("SERVICE")
+                    .lscServiceName("bc1-api")
                     .surname("Doe")
                     .build();
 
@@ -51,6 +56,9 @@ class BenefitCheckerControllerTest {
 
     when(mockBenefitCheckerService.performCheck(request))
         .thenReturn(expectedResponse);
+    when(mockConfigurationService.containsScopedPrincipal(any(),
+        anyString(), anyString(), anyString()))
+        .thenReturn(true);
 
     MvcResult result = mockMvc
             .perform(post("/api/v1/benefitsCheck")
