@@ -59,8 +59,10 @@ runs:
         ECR_REPOSITORY: ${{ inputs.ecr-repository }}
         ECR_REGION: ${{ inputs.ecr-region }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        DOCKER_IMAGE: ${{ inputs.docker-image }}
         GIT_SHA: ${{ github.sha }}
         KUBE_NAMESPACE: ${{ inputs.kube-namespace }}
+        APP_ENVIRONMENT: ${{ inputs.app-environment }}
         VALUES_FILE: .helm/laa-benefit-checker-interim/values/${{ inputs.app-environment }}.yaml
       run: |
         echo "Environment: ${APP_ENVIRONMENT}"
@@ -71,4 +73,5 @@ runs:
           --set image.tag="${DOCKER_IMAGE}" \
           --values ${VALUES_FILE} \
           --install \
-          --wait
+          --wait \
+          --timeout 5m
