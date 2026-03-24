@@ -85,4 +85,4 @@ runs:
           --timeout 15m
 
         echo "Waiting for deployment to be ready..."
-        kubectl rollout status deployment/$RELEASE_NAME -n ${KUBE_NAMESPACE} --timeout=15m
+        kubectl rollout status deployment/$RELEASE_NAME -n ${KUBE_NAMESPACE} --timeout=20m
