@@ -9,11 +9,12 @@ spec:
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   progressDeadlineSeconds: 1200
+  minReadySeconds: 10
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 100%
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       {{- include "laa-benefit-checker-interim.selectorLabels" . | nindent 6 }}
@@ -25,6 +26,7 @@ spec:
         releaseTime: {{ dateInZone "2006-01-02 15:04:05Z" (now) "UTC"| quote }}
     spec:
       serviceAccountName: {{ include "laa-benefit-checker-interim.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 45
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -57,6 +59,10 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3
             failureThreshold: 2
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 10"]
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
