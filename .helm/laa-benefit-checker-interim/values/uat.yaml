@@ -25,7 +25,7 @@ ingress:
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       SecRuleEngine On
       SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:tx.allowed_methods=GET HEAD POST OPTIONS PUT PATCH DELETE"
-      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-data-stewardship-access-team,tag:namespace=laa-benefit-checker-interim-uat"
+      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-access-court-data,tag:namespace=laa-benefit-checker-interim-uat"
   internalHost:
     host: "laa-benefit-checker-interim-uat.apps.live.cloud-platform.service.justice.gov.uk"
     path: /

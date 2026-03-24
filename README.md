@@ -26,6 +26,8 @@ project.ext.gitPackageUser = <your GitHub username>
 project.ext.gitPackageKey = <your GitHub access token>
 ```
 
+
+
 For more detailed instructions, refer to the laa-ccms-spring-boot-common repository [here](https://github.com/ministryofjustice/laa-ccms-spring-boot-common?tab=readme-ov-file).
 
 More information on GDS can be found [here](https://gds-way.digital.cabinet-office.gov.uk/).
@@ -60,6 +62,7 @@ rm -rf build .gradle
 ./gradlew jacocoTestReport
 ./gradlew jacocoTestCoverageVerification
 
+kubectl get pod -n laa-benefit-checker-interim-prod
 kubectl get pods -n laa-benefit-checker-interim-uat
 helm upgrade --install <name-of-service-as-defined-in-helm-chart> -f <path-to-values-files.yaml> --namespace=<cluster-namespace>
 helm upgrade --install laa-benefit-checker-interim -f laa-benefit-checker-interim-uat/values/development.yaml --namespace=laa-benefit-checker-interim-uat laa-benefit-checker-interim-uat
@@ -90,5 +93,3 @@ The following actuator endpoints have been configured:
 - [MapStruct](https://mapstruct.org/) - used for object mapping, specifically for converting between different Java object types, such as Data Transfer Objects (DTOs)
   and Entity objects. It generates mapping code at compile code.
 - [H2](https://www.h2database.com/html/main.html) - used to provide an example database and should not be used in production.
-
-
