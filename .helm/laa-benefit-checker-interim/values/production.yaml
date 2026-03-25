@@ -16,10 +16,10 @@ service:
 
 ingress:
   enabled: true
-  className: modsec-non-prod
-  environmentName: laa-benefit-checker-interim-production
+  className: modsec
+  environmentName: laa-benefit-checker-interim-prod
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-external-laa-benefit-checker-interim-prod-green"
+    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-laa-benefit-checker-interim-prod-green"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     nginx.ingress.kubernetes.io/enable-modsecurity: "true"
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
@@ -29,11 +29,6 @@ ingress:
   internalHost:
     host: "laa-benefit-checker-interim.apps.live.cloud-platform.service.justice.gov.uk"
     path: /
-  externalHost:
-    host: "laa-benefit-checker-interim.apps.live.cloud-platform.service.justice.gov.uk"
-    paths:
-      swaggerPath: /open-api/swagger-ui
-      openApiPath: /open-api/api-docs
 
 resources:
   limits:
