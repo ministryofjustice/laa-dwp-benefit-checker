@@ -12,7 +12,7 @@ spec:
     matchNames:
       - {{ .Values.namespace }}
   endpoints:
-    - port: {{ .Values.actuator.metrics.port }}
+    - port: http
       interval: {{ .Values.actuator.metrics.scrapeInterval }}
       path: {{ .Values.actuator.metrics.path }}
 {{- end }}
