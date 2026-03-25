@@ -7,7 +7,7 @@ replicaCount: 2
 
 image:
   repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/laa-access-court-data/laa-benefit-checker-interim-uat
-
+  tag: ""
 serviceAccount:
   create: false
 
