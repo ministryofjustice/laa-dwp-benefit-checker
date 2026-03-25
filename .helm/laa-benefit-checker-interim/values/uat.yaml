@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 namespace: laa-benefit-checker-interim-uat
-replicaCount: 2
+replicaCount: 0
 
 image:
   repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/laa-access-court-data/laa-benefit-checker-interim-uat
@@ -51,7 +51,7 @@ aws:
   region: eu-west-2
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 2
   maxReplicas: 8
   targetCPUUtilizationPercentage: 60
