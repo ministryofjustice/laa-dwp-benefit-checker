@@ -53,3 +53,12 @@ spring:
 
 aws:
   region: eu-west-2
+
+actuator:
+  metrics:
+    enabled: true
+    scrapeInterval: 15s
+    path: /actuator/prometheus
+    port: 8080
+  health:
+    path: /actuator/health

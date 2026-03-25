@@ -82,7 +82,4 @@ runs:
           --set image.tag="${GIT_SHA}" \
           --values ${VALUES_FILE} \
           --install \
-          --timeout 15m
-
-        echo "Waiting for deployment to be ready..."
-        kubectl rollout status deployment/$RELEASE_NAME -n ${KUBE_NAMESPACE} --timeout=20m
+          --wait

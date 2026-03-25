@@ -60,3 +60,12 @@ sentry:
   enabled: true
   environment: dev
   tracesSampleRate: 1
+
+actuator:
+  metrics:
+    enabled: false
+    scrapeInterval: 15s
+    path: /actuator/prometheus
+    port: 8080
+  health:
+    path: /actuator/health
