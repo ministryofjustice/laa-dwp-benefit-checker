@@ -6,8 +6,7 @@ namespace: laa-benefit-checker-interim-prod
 replicaCount: 2
 
 image:
-  repository: null
-  tag: null
+  repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/laa-access-court-data/laa-benefit-checker-interim-uat
 
 serviceAccount:
   create: false
@@ -17,16 +16,20 @@ service:
   port: 8080
 
 ingress:
-  enabled: false
-
-ingressInternal:
   enabled: true
-  className: internal
+  className: modsec
+  environmentName: laa-benefit-checker-interim-prod
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: "laa-dwp-benefit-checker-internal-laa-dwp-benefit-checker-prod-green"
+    external-dns.alpha.kubernetes.io/set-identifier: "laa-benefit-checker-interim-laa-benefit-checker-interim-prod-green"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
-  hosts: 
-    - "laa-dwp-benefit-checker.internal.cloud-platform.service.justice.gov.uk"
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRuleEngine On
+      SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:tx.allowed_methods=GET HEAD POST OPTIONS PUT PATCH DELETE"
+      SecDefaultAction "phase:2,pass,log,tag:github_team=laa-access-court-data,tag:namespace=laa-benefit-checker-interim-prod"
+  internalHost:
+    host: "laa-benefit-checker-interim.apps.live.cloud-platform.service.justice.gov.uk"
+    path: /
 
 resources:
   limits:
@@ -35,6 +38,12 @@ resources:
   requests:
     cpu: 25m
     memory: 1G
+
+spring:
+  profile: production
+
+aws:
+  region: eu-west-2
 
 autoscaling:
   enabled: true
@@ -47,12 +56,6 @@ sentry:
   enabled: true
   environment: production
   tracesSampleRate: 1
-
-spring:
-  profile: production
-
-aws:
-  region: eu-west-2
 
 actuator:
   metrics:
