@@ -19,7 +19,14 @@ public class WebServiceClientConfig {
   @Bean
   public Jaxb2Marshaller marshaller() {
     Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-    marshaller.setContextPath("uk.gov.dwp.common.cis.getbenefitstatusext.service._3");
+//    marshaller.setContextPath("uk.gov.dwp.common.cis.getbenefitstatusext.service._3");
+//    marshaller.setPackagesToScan("uk.gov.dwp.common.cis.getbenefitstatusext");
+
+    marshaller.setPackagesToScan(
+        "uk.gov.dwp.common.cis.getbenefitstatusext.data._3",
+        "uk.gov.dwp.common.cis.getbenefitstatusext.service"
+    );
+
     return marshaller;
   }
 
@@ -32,7 +39,9 @@ public class WebServiceClientConfig {
   @Bean
   public DwpClient dwpClient(Jaxb2Marshaller marshaller) {
     DwpClient client = new DwpClient();
-    client.setDefaultUri("http://localhost:8080/ws");
+    //client.setDefaultUri("http://localhost:8080/ws");
+    client.setDefaultUri("http://localhost:8080/axis/services/CorporateCISGetBenefitStatusExtWS03?wsdl");
+
     client.setMarshaller(marshaller);
     client.setUnmarshaller(marshaller);
     return client;

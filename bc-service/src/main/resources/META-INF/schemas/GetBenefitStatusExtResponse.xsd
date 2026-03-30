@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:res="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0/API110_GetBenefitStatusExt"
+        xmlns:ns1="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/3.0"
+        targetNamespace="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0/API110_GetBenefitStatusExt"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+    <!-- Import the 3.0 data namespace where Item is defined -->
+    <xs:import namespace="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/3.0"
+               schemaLocation="GetBenefitStatusExtResponseData.xsd"/>
+
+    <!-- Response wrapper element -->
+    <xs:element name="getBenefitStatusExtResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="itemList" type="ns1:Item"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/2.0"
+        xmlns="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/2.0"
+        xmlns:data="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/2.0"
+        elementFormDefault="qualified">
+
+    <!-- Operation wrapper -->
+    <xs:element name="getBenefitStatusExt">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="surname" type="xs:string"
+                            xmlns="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/2.0"/>
+                <xs:element name="dateOfBirth" type="xs:string"
+                            xmlns="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/2.0"/>
+                <xs:element name="nino" type="xs:string"
+                            xmlns="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/2.0"/>
+                <xs:element name="dateOfAward" type="xs:string"
+                            xmlns="http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/2.0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
