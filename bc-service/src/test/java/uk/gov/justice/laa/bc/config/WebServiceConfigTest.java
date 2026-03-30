@@ -61,7 +61,7 @@ class WebServiceConfigTest {
     // Assert resource path
     SimpleXsdSchema simpleSchema = (SimpleXsdSchema) schema;
     ResourceSource resource = (ResourceSource) simpleSchema.getSource();
-    assertTrue(resource.getSystemId().contains("META-INF/schemas/LSC_BenefitChecker_WS_01.xsd"));
+    assertTrue(resource.getSystemId().contains("META-INF/schemas/laa/LSC_BenefitChecker_WS_01.xsd"));
   }
 
   @Test

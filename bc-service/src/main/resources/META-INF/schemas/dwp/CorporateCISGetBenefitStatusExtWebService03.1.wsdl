@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:ciscommonext="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt"
+  xmlns:tns1="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0">
+
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+      targetNamespace="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0/API110_GetBenefitStatusExt"
+      xmlns:ciscommonext="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt"
+      xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:import namespace="https://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/3.0"
+        schemaLocation="CorporateCISGetBenefitStatusExt03.1.xsd"/>
+      <xsd:import namespace="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt"
+        schemaLocation="CorporateCISCommonExt02.0.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="GetBenefitStatusExtRequest">
+    <wsdl:part element="tns1:GetBenefitStatusExtRequest" name="in"/>
+  </wsdl:message>
+  <wsdl:message name="GetBenefitStatusExtResponse">
+    <wsdl:part element="tns1:GetBenefitStatusExtResponse" name="out"/>
+  </wsdl:message>
+
+  <wsdl:portType name="CorporateCISGetBenefitStatusExtWS03">
+    <wsdl:operation name="getBenefitStatusExt">
+      <wsdl:input message="tns1:GetBenefitStatusExtRequest" name="getBenefitStatusExtRequest"/>
+      <wsdl:output message="tns1:GetBenefitStatusExtResponse" name="getBenefitStatusExtResponse"/>
+      <wsdl:fault message="tns1:ExtCISFaultDetails" name="ExtCISFaultDetails"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:message name="ExtCISFaultDetails">
+    <wsdl:part element="ciscommonext:ExtCISFaultDetails" name="fault"/>
+  </wsdl:message>
+
+  <wsdl:binding name="CorporateCISGetBenefitStatusExtWebService03SoapBinding"
+    type="tns1:CorporateCISGetBenefitStatusExtWS03">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getBenefitStatusExt">
+      <wsdlsoap:operation/>
+      <wsdl:input>
+        <wsdlsoap:body parts="in" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <wsdlsoap:body parts="out" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ExtCISFaultDetails">
+        <wsdlsoap:fault name="ExtCISFaultDetails" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="CorporateCISGetBenefitStatusExtWebService03">
+    <wsdl:port binding="tns1:CorporateCISGetBenefitStatusExtWebService03SoapBinding"
+      name="CorporateCISGetBenefitStatusExtWS03">
+      <wsdlsoap:address
+        location="http://localhost:9080/cis_webservices_ext_r2/services/CorporateCISGetBenefitStatusExtWS03"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

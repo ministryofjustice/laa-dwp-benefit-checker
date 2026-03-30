@@ -42,7 +42,7 @@ public class WebServiceConfig {
   @Bean
   public XsdSchema checkSchema() {
     return new SimpleXsdSchema(
-        new ClassPathResource("META-INF/schemas/LSC_BenefitChecker_WS_01.xsd"));
+        new ClassPathResource("META-INF/schemas/laa/LSC_BenefitChecker_WS_01.xsd"));
   }
 
   /**

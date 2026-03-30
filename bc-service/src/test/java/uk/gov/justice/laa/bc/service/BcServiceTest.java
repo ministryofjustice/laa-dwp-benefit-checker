@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.dwp.common.cis.getbenefitstatusext.service._3_0.api110_getbenefitstatusext.GetBenefitStatusExtResponse;
+import uk.gov.dwp.common.cis.getbenefitstatusext.service._3.GetBenefitStatusExtResponse;
 import uk.gov.justice.laa.bc.client.DwpClient;
 import uk.gov.justice.laa.bc.utils.LogMonitoring;
 import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerRequest;

@@ -1,6 +1,7 @@
 plugins {
     id 'io.freefair.lombok' version '9.2.0'
     id 'uk.gov.laa.springboot.laa-spring-boot-gradle-plugin' version '2.1.6'
+    id "com.github.bjornvester.wsdl2java" version "2.0.2"
     id "com.github.bjornvester.xjc" version "1.9.0"
 }
 
@@ -91,8 +92,16 @@ dependencies {
 xjc {
     useJakarta.set(true)   // generate jakarta.* imports
     xjcVersion.set("3.0.2") // XJC version supporting jakarta namespace
-    xsdDir.set(layout.projectDirectory.dir("src/main/resources/META-INF/schemas"))
+    xsdDir.set(layout.projectDirectory.dir("src/main/resources/META-INF/schemas/laa"))
     markGenerated.set(true)
     generateEpisode.set(true)
     // javaPackage = "com.example.generated"
+}
+
+wsdl2java {
+    // ...
+    wsdlDir.set(layout.projectDirectory.dir("src/main/resources/META-INF/schemas/dwp"))
+    markGenerated.set(true)
+    useJakarta.set(true)
+    // ...
 }

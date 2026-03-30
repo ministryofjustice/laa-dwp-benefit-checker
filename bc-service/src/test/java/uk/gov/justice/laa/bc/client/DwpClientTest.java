@@ -10,8 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ws.client.core.WebServiceTemplate;
-import uk.gov.dwp.common.cis.getbenefitstatusext.service._2.GetBenefitStatusExt;
-import uk.gov.dwp.common.cis.getbenefitstatusext.service._3_0.api110_getbenefitstatusext.GetBenefitStatusExtResponse;
+import uk.gov.dwp.common.cis.getbenefitstatusext.service._3.GetBenefitStatusExtRequest;
+import uk.gov.dwp.common.cis.getbenefitstatusext.service._3.GetBenefitStatusExtResponse;
 
 /**
  *  DwpClient Test.
@@ -27,7 +27,7 @@ public class DwpClientTest {
 
   @Test
   public void givenDwpClient_whenPerformCheck_thenIsSuccess() {
-    GetBenefitStatusExt request = new GetBenefitStatusExt();
+    GetBenefitStatusExtRequest request = new GetBenefitStatusExtRequest();
     GetBenefitStatusExtResponse response = new GetBenefitStatusExtResponse();
     when(webServiceTemplate.marshalSendAndReceive(any())).thenReturn(response);
 
