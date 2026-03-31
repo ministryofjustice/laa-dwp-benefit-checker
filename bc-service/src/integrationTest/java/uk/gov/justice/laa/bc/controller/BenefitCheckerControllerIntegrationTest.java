@@ -34,7 +34,7 @@ public class BenefitCheckerControllerIntegrationTest {
             .dateOfBirth("19900101")
             .clientUserId("cl_user_id_1234")
             .clientOrgId("ab_orgc_12_34")
-            .lscServiceName("SERVICE")
+            .lscServiceName("bc1-api")
             .surname("Doe")
             .build();
 

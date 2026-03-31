@@ -1,19 +1,26 @@
 package uk.gov.justice.laa.bc.validator;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.contains;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
+import uk.gov.justice.laa.bc.service.ConfigurationService;
 
 /**
  * BenefitCheckRequestValidatorTest.
@@ -24,12 +31,15 @@ public class BenefitCheckRequestValidatorTest {
   private BenefitCheckRequestValidation.BenefitCheckRequestValidator validator;
   private ConstraintValidatorContext ctx;
   private ConstraintValidatorContext.ConstraintViolationBuilder builder;
+  @Mock
+  private ConfigurationService configurationService;
 
   @BeforeEach
   void setup() {
     validator = new BenefitCheckRequestValidation.BenefitCheckRequestValidator();
     ctx = mock(ConstraintValidatorContext.class);
     builder = mock(ConstraintValidatorContext.ConstraintViolationBuilder.class);
+    ReflectionTestUtils.setField(validator, "configurationService", configurationService);
 
     // Default behaviour for any violation
     lenient().when(ctx.buildConstraintViolationWithTemplate(anyString())).thenReturn(builder);
@@ -37,7 +47,7 @@ public class BenefitCheckRequestValidatorTest {
 
   private BenefitCheckRequestBody validRequest() {
     BenefitCheckRequestBody request = new BenefitCheckRequestBody();
-    request.setLscServiceName("SERVICE");
+    request.setLscServiceName("bc1-api");
     request.setClientOrgId("ab_orgc_12_34");
     request.setClientUserId("cl_user_id_1234");
     request.setSurname("Doe");
@@ -55,9 +65,17 @@ public class BenefitCheckRequestValidatorTest {
   @Test
   void validRequest_returnsTrue() {
     BenefitCheckRequestBody req = validRequest();
+    when(configurationService.containsScopedPrincipal(any(),
+        any(), any(), any())).thenReturn(true);
 
     boolean result = validator.isValid(req, ctx);
+
     assertTrue(result);
+
+    // Verify security check invoked with the same values
+    verify(configurationService).containsScopedPrincipal(eq(ctx),
+        eq("bc1-api"), eq("ab_orgc_12_34"), eq("cl_user_id_1234"));
+
   }
 
   @Test
@@ -75,12 +93,28 @@ public class BenefitCheckRequestValidatorTest {
   void missingServiceName_makesCredentialsInvalid() {
     BenefitCheckRequestBody req = validRequest();
     req.setLscServiceName("");
-
+    when(configurationService.containsScopedPrincipal(any(), any(), any(), any())).thenReturn(
+        Boolean.TRUE);
     boolean result = validator.isValid(req, ctx);
 
     assertFalse(result);
     verify(ctx).buildConstraintViolationWithTemplate(contains("LSCServiceName"));
   }
+
+
+  @Test
+  void isValid_securityCheckFails() {
+    BenefitCheckRequestBody req = validRequest();
+    when(configurationService.containsScopedPrincipal(any(), anyString(), anyString(), anyString()))
+        .thenReturn(false);
+
+    boolean result = validator.isValid(req, ctx);
+
+    assertThat(result).isFalse();
+    verify(configurationService).containsScopedPrincipal(any(), anyString(), anyString(),
+        anyString());
+  }
+
 
   // ---------------------------------------------------------------------
   // validateString()
