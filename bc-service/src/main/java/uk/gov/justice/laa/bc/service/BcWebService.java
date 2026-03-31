@@ -32,6 +32,7 @@ import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
 public class BcWebService {
   private final RestTemplate restTemplate;
   private final String soapUrl;
+  private static final String FEATURE = "http://apache.org/xml/features/disallow-doctype-decl";
 
   public BcWebService(RestTemplate restTemplate, @Value(value = "${dwp.soap.url}") String soapUrl) {
     this.restTemplate = restTemplate;
@@ -99,6 +100,12 @@ public class BcWebService {
         response = restTemplate.postForEntity(soapUrl, httpRequest, String.class);
     String body = response.getBody();
     DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+    try {
+      builderFactory.setFeature(FEATURE, true);
+      builderFactory.setXIncludeAware(false);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     DocumentBuilder builder = builderFactory.newDocumentBuilder();
     Document xmlDocument = builder.parse(new InputSource(new StringReader(body)));
     XPath path = XPathFactory.newInstance().newXPath();
