@@ -2,7 +2,7 @@ name: Build and deploy after PR merged
 
 on:
   push:
-    branches: [ "LAA-CONNECT-1308" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
