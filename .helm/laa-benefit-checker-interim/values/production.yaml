@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+namespace: laa-benefit-checker-interim-prod
 replicaCount: 2
 
 image:
@@ -55,3 +56,12 @@ sentry:
   enabled: true
   environment: production
   tracesSampleRate: 1
+
+actuator:
+  metrics:
+    enabled: true
+    scrapeInterval: 15s
+    path: /actuator/prometheus
+    port: 8080
+  health:
+    path: /actuator/health

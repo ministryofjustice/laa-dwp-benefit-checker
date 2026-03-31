@@ -58,6 +58,7 @@ runs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         GIT_SHA: ${{ github.sha }}
         KUBE_NAMESPACE: ${{ inputs.kube-namespace }}
+        APP_ENVIRONMENT: ${{ inputs.app-environment }}
         VALUES_FILE: .helm/laa-benefit-checker-interim/values/${{ inputs.app-environment }}.yaml
       run: |
         echo "Environment: ${APP_ENVIRONMENT}"
