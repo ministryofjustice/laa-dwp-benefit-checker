@@ -1,6 +1,7 @@
 package uk.gov.justice.laa.bc.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,9 +22,8 @@ public class BenefitCheckerControllerIntegrationTest {
   @Autowired
   private MockMvc mockMvc;
 
-
-
-  @Test
+  //this wont work unless mock or real dwp soap endpoint running
+  //@Test
   void shouldCreateItem() throws Exception {
 
     BenefitCheckRequestBody request =
@@ -69,6 +69,32 @@ public class BenefitCheckerControllerIntegrationTest {
                 .content(toJson(request))
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().is4xxClientError());
+  }
+
+  //this wont work unless mock or real dwp soap endpoint running
+  //@Test
+  void shouldReturnYes() throws Exception {
+
+    BenefitCheckRequestBody request =
+        BenefitCheckRequestBody.builder()
+            .clientReference("ABC123")
+            .nino("AB123456C")
+            .dateOfBirth("20000101")
+            .dateOfAward("20200101")
+            .clientUserId("cl_user_id_1234")
+            .clientOrgId("ab_orgc_12_34")
+            .lscServiceName("SERVICE")
+            .surname("YESJOHN")
+            .build();
+
+    mockMvc
+        .perform(
+            post("/api/v1/benefitsCheck")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.benefitCheckerStatus").value("Yes"));
   }
 
   @SneakyThrows
