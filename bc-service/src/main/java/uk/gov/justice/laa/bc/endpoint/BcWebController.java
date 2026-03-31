@@ -1,4 +1,4 @@
-package uk.gov.justice.laa.bc.controller;
+package uk.gov.justice.laa.bc.endpoint;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,22 +8,26 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.justice.laa.bc.api.BenefitsCheckerApi;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
-import uk.gov.justice.laa.bc.service.BenefitCheckerService;
+import uk.gov.justice.laa.bc.service.BcWebService;
 
 /**
- * Controller for handling items requests.
+ * Controller for handling items requests via http.
  */
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class BenefitCheckerController implements BenefitsCheckerApi {
-  private final BenefitCheckerService service;
+public class BcWebController implements BenefitsCheckerApi {
+  private final BcWebService service;
 
 
   @Override
   public ResponseEntity<BenefitCheckResponseBody> benefitCheck(
-          @RequestBody BenefitCheckRequestBody benefitCheckRequestBody) {
+      @RequestBody BenefitCheckRequestBody benefitCheckRequestBody) {
     log.info("YESS {}", benefitCheckRequestBody);
-    return ResponseEntity.ok(service.performCheck(benefitCheckRequestBody));
+    try {
+      return ResponseEntity.ok(service.performCheck((benefitCheckRequestBody)));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
