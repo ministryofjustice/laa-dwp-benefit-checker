@@ -13,28 +13,28 @@
  * $Workfile: CorporateCISCommonExt02.0.xsd $
 -->
 <xs:schema targetNamespace="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt"
-  elementFormDefault="qualified"
-  attributeFormDefault="qualified"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:ciscommonext="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt">
+           elementFormDefault="qualified"
+           attributeFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ciscommonext="http://dwp.gov.uk/Common/CIS/Common/Data/2.0/MessagingExt">
 
-  <xs:element name="ExtCISFaultDetails">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" name="extCISErrors" nillable="false"
-          type="ciscommonext:ExtCISError"/>
-      </xs:sequence>
+    <xs:element name="ExtCISFaultDetails">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="extCISErrors" nillable="false"
+                            type="ciscommonext:ExtCISError"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="ExtCISError">
+        <xs:sequence>
+            <xs:element name="errorCode" nillable="false" type="xs:string"/>
+            <xs:element name="errorMessage" nillable="false" type="xs:string"/>
+        </xs:sequence>
     </xs:complexType>
-  </xs:element>
-  <xs:complexType name="ExtCISError">
-    <xs:sequence>
-      <xs:element name="errorCode" nillable="false" type="xs:string"/>
-      <xs:element name="errorMessage" nillable="false" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="ExtCISDate">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="[0-9]{8}"/>
-    </xs:restriction>
-  </xs:simpleType>
+    <xs:simpleType name="ExtCISDate">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{8}"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

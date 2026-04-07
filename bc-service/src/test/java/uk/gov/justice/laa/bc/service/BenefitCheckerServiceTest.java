@@ -1,9 +1,5 @@
 package uk.gov.justice.laa.bc.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +8,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.laa.bc.client.DwpSoapClient;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BenefitCheckerServiceTest {
@@ -26,8 +26,8 @@ class BenefitCheckerServiceTest {
   public void performCheck() {
     BenefitCheckResponseBody benefitCheckResponseBody =
             benefitCheckerService.performCheck(
-            BenefitCheckRequestBody.builder().build()
-    );
+                    BenefitCheckRequestBody.builder().build()
+            );
 
     assertEquals("Yes", benefitCheckResponseBody.getBenefitCheckerStatus());
 

@@ -15,6 +15,7 @@ import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 import uk.gov.justice.laa.bc.endpoint.BcEndpoint;
 
+
 /**
  * Setup config for SOAP service.
  */
@@ -31,7 +32,7 @@ public class WebServiceConfig {
    */
   @Bean
   public ServletRegistrationBean<MessageDispatcherServlet> webServiceServlet(
-      ApplicationContext context) {
+          ApplicationContext context) {
     MessageDispatcherServlet servlet = new MessageDispatcherServlet();
     servlet.setApplicationContext(context);
     servlet.setTransformWsdlLocations(true);
@@ -42,7 +43,7 @@ public class WebServiceConfig {
   @Bean
   public XsdSchema checkSchema() {
     return new SimpleXsdSchema(
-        new ClassPathResource("META-INF/schemas/LSC_BenefitChecker_WS_01.xsd"));
+            new ClassPathResource("META-INF/schemas/LSC_BenefitChecker_WS_01.xsd"));
   }
 
   /**

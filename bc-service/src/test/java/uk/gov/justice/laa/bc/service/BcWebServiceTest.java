@@ -1,30 +1,21 @@
 package uk.gov.justice.laa.bc.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.dwp.common.cis.getbenefitstatusext.service._3.Item;
 import uk.gov.justice.laa.bc.model.BenefitCheckRequestBody;
 import uk.gov.justice.laa.bc.model.BenefitCheckResponseBody;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BcWebServiceTest {
@@ -76,14 +67,14 @@ class BcWebServiceTest {
     request.setNino("AA123456A");
 
     String xmlResponse =
-        "<Envelope><Body><getBenefitStatusExtResponse>"
-            + "<itemList><id>ABC123</id><value>APPROVED</value></itemList>"
-            + "</getBenefitStatusExtResponse></Body></Envelope>";
+            "<Envelope><Body><getBenefitStatusExtResponse>"
+                    + "<itemList><id>ABC123</id><value>APPROVED</value></itemList>"
+                    + "</getBenefitStatusExtResponse></Body></Envelope>";
 
     ResponseEntity<String> mockResponse = new ResponseEntity<>(xmlResponse, HttpStatus.OK);
 
     when(restTemplate.postForEntity(eq(SOAP_URL), any(HttpEntity.class), eq(String.class)))
-        .thenReturn(mockResponse);
+            .thenReturn(mockResponse);
 
     // Act
     Item item = service.perform(request);
@@ -112,12 +103,12 @@ class BcWebServiceTest {
     request.setNino(null);
 
     String xmlResponse =
-        "<Envelope><Body><getBenefitStatusExtResponse>"
-            + "<itemList><id>X1</id><value>NONE</value></itemList>"
-            + "</getBenefitStatusExtResponse></Body></Envelope>";
+            "<Envelope><Body><getBenefitStatusExtResponse>"
+                    + "<itemList><id>X1</id><value>NONE</value></itemList>"
+                    + "</getBenefitStatusExtResponse></Body></Envelope>";
 
     when(restTemplate.postForEntity(eq(SOAP_URL), any(HttpEntity.class), eq(String.class)))
-        .thenReturn(ResponseEntity.ok(xmlResponse));
+            .thenReturn(ResponseEntity.ok(xmlResponse));
 
     // Act
     service.perform(request);
@@ -139,7 +130,7 @@ class BcWebServiceTest {
     request.setNino("AB123456C");
 
     when(restTemplate.postForEntity(eq(SOAP_URL), any(HttpEntity.class), eq(String.class)))
-        .thenReturn(ResponseEntity.ok("<bad-xml>"));
+            .thenReturn(ResponseEntity.ok("<bad-xml>"));
 
     // Act + Assert
     assertThrows(Exception.class, () -> service.perform(request));

@@ -16,6 +16,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+
 /**
  * The global exception handler for all exceptions.
  */
@@ -26,15 +27,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotReadable(
-      HttpMessageNotReadableException exception,
-      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+          HttpMessageNotReadableException exception,
+          HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     return handleInvalidRequestContent(exception, headers, request);
   }
 
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException exception,
-      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+          MethodArgumentNotValidException exception,
+          HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     return handleInvalidRequestContent(exception, headers, request);
   }
 
@@ -52,14 +53,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   private ResponseEntity<Object> handleInvalidRequestContent(
-      Exception exception, HttpHeaders headers, WebRequest request) {
+          Exception exception, HttpHeaders headers, WebRequest request) {
     ProblemDetail problemDetail =
-        buildProblemDetail(BAD_REQUEST, "Invalid request content.", request);
+            buildProblemDetail(BAD_REQUEST, "Invalid request content.", request);
     return handleExceptionInternal(exception, problemDetail, headers, BAD_REQUEST, request);
   }
 
   private ProblemDetail buildProblemDetail(
-      HttpStatusCode status, String detail, WebRequest request) {
+          HttpStatusCode status, String detail, WebRequest request) {
     ProblemDetail problemDetail = ProblemDetail.forStatus(status);
     problemDetail.setType(DEFAULT_PROBLEM_TYPE);
     problemDetail.setDetail(detail);

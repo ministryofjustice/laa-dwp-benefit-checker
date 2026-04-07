@@ -22,7 +22,7 @@ public class BcWebController implements BenefitsCheckerApi {
 
   @Override
   public ResponseEntity<BenefitCheckResponseBody> benefitCheck(
-      @RequestBody BenefitCheckRequestBody benefitCheckRequestBody) {
+          @RequestBody BenefitCheckRequestBody benefitCheckRequestBody) {
     log.info("YESS {}", benefitCheckRequestBody);
     try {
       return ResponseEntity.ok(service.performCheck((benefitCheckRequestBody)));
