@@ -3,7 +3,7 @@ package uk.gov.justice.laa.bc.validator;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.laa.bc.exception.BadRequestException;
+import uk.gov.justice.laa.bc.exception.ValidationException;
 import uk.gov.justice.laa.bc.service.AuthorisationService;
 import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerRequest;
 
@@ -116,15 +116,14 @@ public class BenefitCheckRequestValidator {
 
     // check for blank
     if (StringUtils.isEmpty(propertyValue)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_BLANK
-                      + " Missing '" + propertyName + "'");
+      throw new ValidationException(
+              ReturnCodes.MSG_CODE_VALIDATION_BLANK, " Missing '" + propertyName + "'");
     } else {
       // check for max length
       if ((minLength != -1 & maxLength != -1)
               && (propertyValue.length() < minLength || propertyValue.length() > maxLength)) {
-        throw new BadRequestException(
-                ReturnCodes.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
+        throw new ValidationException(
+                ReturnCodes.MSG_CODE_VALIDATION_SIZE, " Error in request parameter '"
                         + propertyName + "'");
       }
     }
@@ -145,14 +144,14 @@ public class BenefitCheckRequestValidator {
 
     // check for blank
     if (StringUtils.isBlank(dateString) && !tolerateNull) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_BLANK + " Missing '" + propertyName + "'");
+      throw new ValidationException(
+              ReturnCodes.MSG_CODE_VALIDATION_BLANK, " Missing '" + propertyName + "'");
     } else {
       if (!StringUtils.isBlank(dateString)) {
         // check for max length
         if (dateString.length() != MAX_LEN_DATE) {
-          throw new BadRequestException(
-                  ReturnCodes.MSG_CODE_VALIDATION_SIZE + " Error in request parameter '"
+          throw new ValidationException(
+                  ReturnCodes.MSG_CODE_VALIDATION_SIZE, " Error in request parameter '"
                           + propertyName + "'");
         }
       }
@@ -171,8 +170,8 @@ public class BenefitCheckRequestValidator {
 
     // check for blank
     if (StringUtils.isBlank(nationalInsuranceNumber)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_BLANK + " Missing 'NI' no.");
+      throw new ValidationException(
+              ReturnCodes.MSG_CODE_VALIDATION_BLANK, " Missing 'NI' no.");
 
     } else {
 
@@ -181,9 +180,8 @@ public class BenefitCheckRequestValidator {
         // Potentially could check RegEx expression - e.g. "[a-zA-Z]{2}[0-9]{6}[a-dA-D]?"
 
       } else {
-        throw new BadRequestException(
-                ReturnCodes.MSG_CODE_VALIDATION_SIZE
-                        + " Error in 'NI' no. request parameter.");
+        throw new ValidationException(
+                ReturnCodes.MSG_CODE_VALIDATION_SIZE, " Error in 'NI' no. request parameter.");
       }
     }
   }

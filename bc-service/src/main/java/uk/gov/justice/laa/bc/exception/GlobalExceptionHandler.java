@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
           MethodArgumentNotValidException exception,
           HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     return handleInvalidRequestContent(exception, headers, request);
+  }
+
+  @ExceptionHandler(ValidationException.class)
+  public ResponseEntity<String> handleValidationException(ValidationException ex) {
+    return new ResponseEntity<>(ex.getErrorCode() + " " + ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
   /**

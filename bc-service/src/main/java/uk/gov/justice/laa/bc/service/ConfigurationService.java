@@ -1,8 +1,10 @@
 package uk.gov.justice.laa.bc.service;
 
 import jakarta.annotation.PostConstruct;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.gov.justice.laa.bc.model.ClientOrg;
 import uk.gov.justice.laa.bc.model.Configuration;
 
 /**
@@ -23,7 +25,11 @@ public class ConfigurationService {
     configuration = Configuration.parse(serviceName, clientDefinitions);
   }
 
-  public Configuration getConfiguration() {
-    return configuration;
+  public String getServiceName() {
+    return configuration.getServiceName();
+  }
+
+  public Map<String, ClientOrg> getClientOrgs() {
+    return configuration.getClientOrgs();
   }
 }

@@ -4,7 +4,7 @@ import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import uk.gov.justice.laa.bc.exception.BadRequestException;
+import uk.gov.justice.laa.bc.exception.ValidationException;
 import uk.gov.justice.laa.bc.validator.ReturnCodes;
 import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerRequest;
 
@@ -38,29 +38,7 @@ public class AuthorisationService {
     // i.g. "xx_xxxx_xx_xxxx"
     String requestUserId = benefitCheckerRequest.getClientUserId();
 
-    if (!configurationService.getConfiguration().getServiceName().equals(requestServiceName)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_SVRNAME + "Did not match request 'Service Context' ["
-                      + requestServiceName + "] with those registered with the application");
-    }
-
-    if (!configurationService.getConfiguration().getClientOrgs().containsKey(requestGroupId)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_CLIENTORG + "Did not match request 'Client Org. Id' ["
-                      + requestGroupId + "] with those registered with the application "
-                      + configurationService.getConfiguration().getClientOrgs().keySet());
-    }
-
-    Collection<String> userIds = configurationService.getConfiguration()
-            .getClientOrgs().get(requestGroupId).getUserIds();
-
-    if (!userIds.contains(requestUserId)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_USERID + "Did not match request 'Client User Id' ["
-                      + requestUserId + "] for Client [" + requestGroupId
-                      + "] with those registered with the application e.g. " + userIds);
-    }
-
+    performSecurityCheck(requestServiceName, requestGroupId, requestUserId);
   }
 
   /**
@@ -70,27 +48,27 @@ public class AuthorisationService {
    * @param requestGroupId     String
    * @param requestUserId      String
    */
-  public void containsScopedPrincipal(String requestServiceName, String requestGroupId,
-                                      String requestUserId) {
-    if (!configurationService.getConfiguration().getServiceName().equals(requestServiceName)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_SVRNAME + "Did not match request 'Service Context' ["
+  public void performSecurityCheck(String requestServiceName, String requestGroupId,
+                                   String requestUserId) {
+    if (!configurationService.getServiceName().equals(requestServiceName)) {
+      throw new ValidationException(
+              ReturnCodes.MSG_CODE_VALIDATION_SVRNAME, "Did not match request 'Service Context' ["
                       + requestServiceName + "] with those registered with the application");
     }
 
-    if (!configurationService.getConfiguration().getClientOrgs().containsKey(requestGroupId)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_CLIENTORG + "Did not match request 'Client Org. Id' ["
+    if (!configurationService.getClientOrgs().containsKey(requestGroupId)) {
+      throw new ValidationException(
+              ReturnCodes.MSG_CODE_VALIDATION_CLIENTORG, "Did not match request 'Client Org. Id' ["
                       + requestGroupId + "] with those registered with the application "
-                      + configurationService.getConfiguration().getClientOrgs().keySet());
+                      + configurationService.getClientOrgs().keySet());
     }
 
-    Collection<String> userIds = configurationService.getConfiguration().getClientOrgs()
+    Collection<String> userIds = configurationService.getClientOrgs()
             .get(requestGroupId).getUserIds();
 
     if (!userIds.contains(requestUserId)) {
-      throw new BadRequestException(
-              ReturnCodes.MSG_CODE_VALIDATION_USERID + "Did not match request 'Client User Id' ["
+      throw new ValidationException(
+              ReturnCodes.MSG_CODE_VALIDATION_USERID, "Did not match request 'Client User Id' ["
                       + requestUserId + "] for Client [" + requestGroupId
                       + "] with those registered with the application e.g. " + userIds);
     }

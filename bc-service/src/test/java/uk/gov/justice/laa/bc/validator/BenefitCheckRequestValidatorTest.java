@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.justice.laa.bc.exception.BadRequestException;
+import uk.gov.justice.laa.bc.exception.ValidationException;
 import uk.gov.justice.laa.bc.service.AuthorisationService;
 import uk.gov.lsc.benefitchecker.service._1_0.api_1.BenefitCheckerRequest;
 
@@ -51,7 +51,7 @@ public class BenefitCheckRequestValidatorTest {
 
   @Test
   void missingSurname_makesContentInvalid() {
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckerRequest req = validRequest();
       req.setSurname("");
 
@@ -62,7 +62,7 @@ public class BenefitCheckRequestValidatorTest {
   @Test
   void missingServiceName_makesCredentialsInvalid() {
 
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckerRequest req = validRequest();
       req.setLscServiceName("");
       validator.validate(req);
@@ -82,7 +82,7 @@ public class BenefitCheckRequestValidatorTest {
 
   @Test
   void validateString_blankWhenNotAllowed_returnsFalse() {
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckRequestValidator.validateString(
               "", "TestField", 1, 5
       );
@@ -91,7 +91,7 @@ public class BenefitCheckRequestValidatorTest {
 
   @Test
   void validateString_lengthTooShort_returnsFalse() {
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckRequestValidator.validateString(
               "A", "TestField", 3, 5
       );
@@ -100,7 +100,7 @@ public class BenefitCheckRequestValidatorTest {
 
   @Test
   void validateString_lengthTooLong_returnsFalse() {
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckRequestValidator.validateString(
               "TOO_LONG_VALUE", "TestField", 1, 5
       );
@@ -121,7 +121,7 @@ public class BenefitCheckRequestValidatorTest {
 
   @Test
   void validateDate_missingWhenRequired_returnsFalse() {
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckRequestValidator.validateDate(
               "", "DateOfBirth", false
       );
@@ -131,7 +131,7 @@ public class BenefitCheckRequestValidatorTest {
   @Test
   void validateDate_wrongLength_returnsFalse() {
 
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckRequestValidator.validateDate(
               "20241", "DateOfBirth", false
       );
@@ -152,7 +152,7 @@ public class BenefitCheckRequestValidatorTest {
   @Test
   void validateNino_blank_returnsFalse() {
 
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckRequestValidator.validateNino(
               ""
       );
@@ -164,7 +164,7 @@ public class BenefitCheckRequestValidatorTest {
   @Test
   void validateNino_wrongLength_returnsFalse() {
 
-    Exception exception = assertThrows(BadRequestException.class, () -> {
+    Exception exception = assertThrows(ValidationException.class, () -> {
       BenefitCheckRequestValidator.validateNino(
               "SHORT"
       );
