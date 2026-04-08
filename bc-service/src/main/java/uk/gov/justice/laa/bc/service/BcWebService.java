@@ -40,29 +40,29 @@ public class BcWebService {
   }
 
   private static final String ENVELOPE = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" "
-      + "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-      + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/2.0\">"
-      + "<SOAP-ENV:Body>"
-      + "<m:getBenefitStatusExt xmlns:m=\"http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/2.0\">"
-      + "<m0:surname>%s</m0:surname>"
-      + "<m0:dateOfBirth>%s</m0:dateOfBirth>"
-      + "<m0:nino>%s</m0:nino>"
-      + "<m0:dateOfAward>%s</m0:dateOfAward>"
-      + "</m:getBenefitStatusExt>"
-      + "</SOAP-ENV:Body>"
-      + "</SOAP-ENV:Envelope>";
+          + "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+          + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Data/2.0\">"
+          + "<SOAP-ENV:Body>"
+          + "<m:getBenefitStatusExt xmlns:m=\"http://dwp.gov.uk/Common/CIS/GetBenefitStatusExt/Service/2.0\">"
+          + "<m0:surname>%s</m0:surname>"
+          + "<m0:dateOfBirth>%s</m0:dateOfBirth>"
+          + "<m0:nino>%s</m0:nino>"
+          + "<m0:dateOfAward>%s</m0:dateOfAward>"
+          + "</m:getBenefitStatusExt>"
+          + "</SOAP-ENV:Body>"
+          + "</SOAP-ENV:Envelope>";
   private static final String PATH_ID = "/"
-      + "*[local-name()='Envelope']"
-      + "/*[local-name()='Body']"
-      + "/*[local-name()='getBenefitStatusExtResponse']"
-      + "/*[local-name()='itemList'][1]"
-      + "/*[local-name()='id']";
+          + "*[local-name()='Envelope']"
+          + "/*[local-name()='Body']"
+          + "/*[local-name()='getBenefitStatusExtResponse']"
+          + "/*[local-name()='itemList'][1]"
+          + "/*[local-name()='id']";
   private static final String PATH_VALUE = "/"
-      + "*[local-name()='Envelope']"
-      + "/*[local-name()='Body']"
-      + "/*[local-name()='getBenefitStatusExtResponse']"
-      + "/*[local-name()='itemList'][1]"
-      + "/*[local-name()='value']";
+          + "*[local-name()='Envelope']"
+          + "/*[local-name()='Body']"
+          + "/*[local-name()='getBenefitStatusExtResponse']"
+          + "/*[local-name()='itemList'][1]"
+          + "/*[local-name()='value']";
 
   /**
    * perform.
@@ -71,7 +71,7 @@ public class BcWebService {
    * @return BenefitCheckResponseBody
    */
   public BenefitCheckResponseBody performCheck(
-      BenefitCheckRequestBody benefitCheckRequestBody) throws Exception {
+          BenefitCheckRequestBody benefitCheckRequestBody) throws Exception {
     Item item = perform(benefitCheckRequestBody);
     BenefitCheckResponseBody response = new BenefitCheckResponseBody();
     response.setConfirmationRef(item.getId());
@@ -81,7 +81,7 @@ public class BcWebService {
   }
 
   protected Item perform(BenefitCheckRequestBody request)
-      throws Exception {
+          throws Exception {
 
     List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
     messageConverters.add(new StringHttpMessageConverter());
@@ -93,11 +93,12 @@ public class BcWebService {
     headers.add("SOAPAction", "");
 
     String xmlString = String.format(ENVELOPE, request.getSurname(), request.getDateOfBirth(),
-        Objects.isNull(request.getNino()) ? "nil" : request.getNino(), request.getDateOfAward());
+            Objects.isNull(request.getNino()) ? "nil" : request.getNino(),
+            request.getDateOfAward());
     HttpEntity<String> httpRequest = new HttpEntity<String>(xmlString, headers);
 
     final ResponseEntity<String>
-        response = restTemplate.postForEntity(soapUrl, httpRequest, String.class);
+            response = restTemplate.postForEntity(soapUrl, httpRequest, String.class);
     String body = response.getBody();
     DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
     try {
@@ -113,7 +114,7 @@ public class BcWebService {
     Item item = new Item();
     item.setId(id.item(0).getTextContent());
     NodeList value = (NodeList) path.compile(PATH_VALUE)
-        .evaluate(xmlDocument, XPathConstants.NODESET);
+            .evaluate(xmlDocument, XPathConstants.NODESET);
     item.setValue(value.item(0).getTextContent());
     return item;
   }

@@ -4,10 +4,11 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.slf4j.LoggerFactory;
 
 /**
  * Some utility functions to capture and verify logs when writing unit tests.
@@ -31,7 +32,7 @@ public class LogMonitoring {
    * getLogsByCriteria.
    *
    * @param listAppender ListAppender
-   * @param criteria List
+   * @param criteria     List
    * @return List
    */
   public static List<ILoggingEvent> getLogsByCriteria(ListAppender<ILoggingEvent> listAppender,
@@ -44,6 +45,6 @@ public class LogMonitoring {
   public static List<ILoggingEvent> getLogsByLevel(ListAppender<ILoggingEvent> listAppender,
                                                    Level level) {
     return getLogsByCriteria(listAppender,
-        logEvent -> logEvent.getLevel().equals(level));
+            logEvent -> logEvent.getLevel().equals(level));
   }
 }

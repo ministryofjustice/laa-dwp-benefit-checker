@@ -1,8 +1,5 @@
 package uk.gov.justice.laa.bc.exception;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +10,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 class GlobalExceptionHandlerTest {
 
   GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
@@ -20,7 +20,7 @@ class GlobalExceptionHandlerTest {
   @Test
   void handleGenericException_returnsInternalServerErrorStatusAndErrorMessage() throws Exception {
     ResponseEntity<String> result = globalExceptionHandler.handleGenericException(
-        new RuntimeException("Something went wrong"));
+            new RuntimeException("Something went wrong"));
 
     assertThat(result).isNotNull();
     assertThat(result.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
@@ -35,7 +35,7 @@ class GlobalExceptionHandlerTest {
     HttpStatusCode status = HttpStatus.BAD_REQUEST;
     WebRequest webRequest = Mockito.mock(WebRequest.class);
     ResponseEntity<Object> result = globalExceptionHandler.handleHttpMessageNotReadable(
-        exception, headers, status, webRequest);
+            exception, headers, status, webRequest);
     assertThat(result).isNotNull();
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
@@ -47,7 +47,7 @@ class GlobalExceptionHandlerTest {
     HttpStatusCode status = HttpStatus.BAD_REQUEST;
     WebRequest webRequest = Mockito.mock(WebRequest.class);
     ResponseEntity<Object> result = globalExceptionHandler.handleMethodArgumentNotValid(
-        exception, headers, status, webRequest);
+            exception, headers, status, webRequest);
     assertThat(result).isNotNull();
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }

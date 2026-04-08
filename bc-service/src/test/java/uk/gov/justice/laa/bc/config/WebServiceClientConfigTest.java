@@ -1,15 +1,13 @@
 package uk.gov.justice.laa.bc.config;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import uk.gov.justice.laa.bc.client.DwpClient;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class WebServiceClientConfigTest {
@@ -28,8 +26,8 @@ class WebServiceClientConfigTest {
     // Assert
     assertNotNull(marshaller);
     assertEquals(
-        "uk.gov.dwp.common.cis.getbenefitstatusext.service._3",
-        marshaller.getContextPath()
+            "uk.gov.dwp.common.cis.getbenefitstatusext.service._3",
+            marshaller.getContextPath()
     );
   }
 

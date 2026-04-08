@@ -1,15 +1,15 @@
 package uk.gov.justice.laa.bc;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.SpringApplication;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class BenefitCheckerApplicationTests {
@@ -21,17 +21,17 @@ class BenefitCheckerApplicationTests {
     String[] args = {"testArg1", "testArg2"};
 
     try (MockedStatic<SpringApplication> mockedSpringApplication
-             = Mockito.mockStatic(SpringApplication.class)) {
+                 = Mockito.mockStatic(SpringApplication.class)) {
       mockedSpringApplication.when(() -> SpringApplication.run(
-          any(Class.class), any(String[].class)))
-          .thenReturn(null); // Or a mock ApplicationContext if needed for further verification
+                      any(Class.class), any(String[].class)))
+              .thenReturn(null); // Or a mock ApplicationContext if needed for further verification
 
       // Act
       BenefitCheckerApplication.main(args);
 
       // Assert
       mockedSpringApplication.verify(() -> SpringApplication.run(
-          eq(BenefitCheckerApplication.class), eq(args)), times(1));
+              eq(BenefitCheckerApplication.class), eq(args)), times(1));
     }
   }
 

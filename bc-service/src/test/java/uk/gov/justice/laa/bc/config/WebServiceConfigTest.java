@@ -1,11 +1,6 @@
 package uk.gov.justice.laa.bc.config;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +13,9 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.transform.ResourceSource;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class WebServiceConfigTest {
@@ -34,7 +32,7 @@ class WebServiceConfigTest {
     // Act
     ApplicationContext context = mock(WebApplicationContext.class);
     ServletRegistrationBean<MessageDispatcherServlet> bean =
-        config.webServiceServlet(context);
+            config.webServiceServlet(context);
 
     // Assert
     assertNotNull(bean);
@@ -56,7 +54,7 @@ class WebServiceConfigTest {
 
     // Assert base object
     assertNotNull(schema);
-    assertTrue(schema instanceof SimpleXsdSchema);
+    assertInstanceOf(SimpleXsdSchema.class, schema);
 
     // Assert resource path
     SimpleXsdSchema simpleSchema = (SimpleXsdSchema) schema;

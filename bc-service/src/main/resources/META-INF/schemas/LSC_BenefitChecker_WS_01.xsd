@@ -1,107 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
-    elementFormDefault="qualified"  
-	attributeFormDefault="qualified" 
-    targetNamespace="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check"
-    xmlns:ns1="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        elementFormDefault="qualified"
+        attributeFormDefault="qualified"
+        targetNamespace="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check"
+        xmlns:ns1="https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-	<xs:element
-			name="BenefitCheckerRequest"
-			nillable="false"
-			type="ns1:benefitCheckerRequest"/>
+    <xs:element
+            name="BenefitCheckerRequest"
+            nillable="false"
+            type="ns1:benefitCheckerRequest"/>
 
-	<xs:element
-			name="BenefitCheckerResponse"
-			nillable="false"
-			type="ns1:benefitCheckerResponse"/>
+    <xs:element
+            name="BenefitCheckerResponse"
+            nillable="false"
+            type="ns1:benefitCheckerResponse"/>
 
-	<xs:element
-			name="BenefitCheckerFaultException"
-			nillable="false"
-			type="ns1:benefitCheckerFaultException"/>
+    <xs:element
+            name="BenefitCheckerFaultException"
+            nillable="false"
+            type="ns1:benefitCheckerFaultException"/>
 
 
-
-	<!--  ********************* -->
+    <!--  ********************* -->
     <!--  ***   Request     *** -->
     <!--  ********************* -->
-		
-	<!--  BenfitChecker request structure -->
-	<xs:complexType name="benefitCheckerRequest">
-		<xs:sequence>
-		    <xs:element name="clientOrgId" type="xs:string" nillable="false"/>
-			<xs:element name="clientUserId" type="xs:string" nillable="false"/>
-			<xs:element name="clientReference" type="xs:string" nillable="false"/>
-			<xs:element name="lscServiceName" type="xs:string" nillable="false"/>
-			<xs:element name="nino" type="ns1:NinoType" nillable="false"/>
-			<xs:element name="surname" type="ns1:SurnameType" nillable="false"/>
-			<xs:element name="dateOfBirth" type="ns1:LSCDateType" nillable="false"/>
-			<xs:element name="dateOfAward" type="ns1:LSCDateType" nillable="true"/>
-		</xs:sequence>
-	</xs:complexType>
-	
-	<!--  National Insurance Number -->
-	<xs:simpleType name="NinoType">
-		<xs:restriction base="xs:string">
-			<xs:maxLength value="9"/>
-			<xs:pattern value="[a-zA-Z]{2}[0-9]{6}[a-dA-D]?"/>
-		</xs:restriction>
-	</xs:simpleType>
-	
+
+    <!--  BenfitChecker request structure -->
+    <xs:complexType name="benefitCheckerRequest">
+        <xs:sequence>
+            <xs:element name="clientOrgId" type="xs:string" nillable="false"/>
+            <xs:element name="clientUserId" type="xs:string" nillable="false"/>
+            <xs:element name="clientReference" type="xs:string" nillable="false"/>
+            <xs:element name="lscServiceName" type="xs:string" nillable="false"/>
+            <xs:element name="nino" type="ns1:NinoType" nillable="false"/>
+            <xs:element name="surname" type="ns1:SurnameType" nillable="false"/>
+            <xs:element name="dateOfBirth" type="ns1:LSCDateType" nillable="false"/>
+            <xs:element name="dateOfAward" type="ns1:LSCDateType" nillable="true"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--  National Insurance Number -->
+    <xs:simpleType name="NinoType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="9"/>
+            <xs:pattern value="[a-zA-Z]{2}[0-9]{6}[a-dA-D]?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <!--  First 3 Chars of Surname  -->
-	<xs:simpleType name="SurnameType">
-		<xs:restriction base="xs:string">
-			<xs:minLength value="1"/>
-			<xs:maxLength value="3"/>
-		</xs:restriction>
-	</xs:simpleType>
-	
-	<!-- Date  format YYCCMMDD -->
-	<xs:simpleType name="LSCDateType">
+    <xs:simpleType name="SurnameType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Date  format YYCCMMDD -->
+    <xs:simpleType name="LSCDateType">
         <xs:restriction base="xs:string">
             <xs:pattern value="[0-9]{8}"/>
         </xs:restriction>
     </xs:simpleType>
 
 
-
-    
     <!--  ********************* -->
     <!--  ***   Response    *** -->
     <!--  ********************* -->
-    
-    <!--  BenefitChecker Response structure -->	
-	<xs:complexType name="benefitCheckerResponse">
-		<xs:sequence>
-			<xs:element name="originalClientRef" type="xs:string" nillable="false"/>
-			<xs:element name="benefitCheckerStatus" type="xs:string" nillable="false"/>
-			<xs:element name="confirmationRef" type="xs:string" nillable="false"/>
-		</xs:sequence>
-	</xs:complexType>
-	
-	
-	
+
+    <!--  BenefitChecker Response structure -->
+    <xs:complexType name="benefitCheckerResponse">
+        <xs:sequence>
+            <xs:element name="originalClientRef" type="xs:string" nillable="false"/>
+            <xs:element name="benefitCheckerStatus" type="xs:string" nillable="false"/>
+            <xs:element name="confirmationRef" type="xs:string" nillable="false"/>
+        </xs:sequence>
+    </xs:complexType>
 
 
-
-	
-	<!--  ********************* -->
+    <!--  ********************* -->
     <!--  ***   Fault       *** -->
     <!--  ********************* -->
-	
-	<!--  Soap fault - error message container -->
-	<xs:complexType name="benefitCheckerFaultException">
-		<xs:sequence>
-			<xs:element name="MessageCode" nillable="false" type="xs:string"/>
+
+    <!--  Soap fault - error message container -->
+    <xs:complexType name="benefitCheckerFaultException">
+        <xs:sequence>
+            <xs:element name="MessageCode" nillable="false" type="xs:string"/>
             <xs:element name="MessageText" nillable="false" type="xs:string"/>
-		</xs:sequence>
-	</xs:complexType>
-	
-	
-	
+        </xs:sequence>
+    </xs:complexType>
 
-	
 
-	
 </xs:schema>

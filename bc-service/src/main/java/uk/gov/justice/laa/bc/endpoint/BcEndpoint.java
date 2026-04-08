@@ -22,7 +22,7 @@ public class BcEndpoint {
 
   public static final String LOCAL_PART = "BenefitCheckerRequest";
   public static final String NAMESPACE_URI =
-      "https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check";
+          "https://lsc.gov.uk/benefitchecker/service/1.0/API_1.0_Check";
 
   private final BcService bcService;
 
@@ -35,11 +35,11 @@ public class BcEndpoint {
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = LOCAL_PART)
   @ResponsePayload
   public JAXBElement<BenefitCheckerResponse> check(
-      @RequestPayload JAXBElement<BenefitCheckerRequest> request) {
+          @RequestPayload JAXBElement<BenefitCheckerRequest> request) {
     log.info("Got request nino {}", request.getValue().getNino());
     log.info("Got request client org id {}", request.getValue().getClientOrgId());
     BenefitCheckerResponse response = bcService.perform(request.getValue());
     return new JAXBElement<>(new QName("BenefitCheckerResponse"), BenefitCheckerResponse.class,
-        response);
+            response);
   }
 }
