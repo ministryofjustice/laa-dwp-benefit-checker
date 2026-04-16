@@ -4,3 +4,8 @@ services:
       context: .
     ports:
       - "8080:8080"
+    environment:
+      - DWP_SOAP_URL=http://localhost:8001/check
+      - CREDENTIALS_SERVICE_CONTEXT=service-context
+      - CREDENTIALS_CLIENT_IDS=org:user;
+

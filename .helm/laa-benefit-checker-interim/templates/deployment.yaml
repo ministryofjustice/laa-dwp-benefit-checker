@@ -59,3 +59,4 @@ spec:
             - name: AWS_REGION
               value: {{ .Values.aws.region | quote }}
             {{ include "sentryConfig" . | nindent 12 }}
+            {{ include "laa-benefit-checker-interim.env-vars" . | nindent 12 }}

@@ -34,7 +34,8 @@ public class BcWebService {
   private final String soapUrl;
   private static final String FEATURE = "http://apache.org/xml/features/disallow-doctype-decl";
 
-  public BcWebService(RestTemplate restTemplate, @Value(value = "${dwp.soap.url}") String soapUrl) {
+  public BcWebService(
+      RestTemplate restTemplate, @Value(value = "${external-services.dwp.url}") String soapUrl) {
     this.restTemplate = restTemplate;
     this.soapUrl = soapUrl;
   }
