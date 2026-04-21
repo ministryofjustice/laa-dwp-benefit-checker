@@ -16,3 +16,11 @@ management:
     web:
       exposure:
         include: health,info,metrics,prometheus
+
+external-services:
+  dwp:
+    url: ${DWP_SOAP_URL}
+
+service:
+  name: ${CREDENTIALS_SERVICE_CONTEXT}
+  client-ids: ${CREDENTIALS_CLIENT_IDS}

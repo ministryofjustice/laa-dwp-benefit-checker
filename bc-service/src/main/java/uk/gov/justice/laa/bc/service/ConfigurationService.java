@@ -15,9 +15,9 @@ import uk.gov.justice.laa.bc.model.Configuration;
 public class ConfigurationService {
 
   private Configuration configuration;
-  @Value("${credentials.service.context}")
+  @Value("${service.name}")
   private String serviceName;
-  @Value("${client.ids}")
+  @Value("${service.client-ids}")
   private String clientDefinitions;
 
   @PostConstruct

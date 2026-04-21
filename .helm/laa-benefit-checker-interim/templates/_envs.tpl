@@ -23,3 +23,21 @@
   value: "false"
 {{- end }}
 {{- end }}
+
+{{- define "laa-benefit-checker-interim.env-vars"}}
+- name: DWP_SOAP_URL
+  valueFrom:
+    secretKeyRef:
+      name: aws-secrets
+      key: DWP_SOAP_URL
+- name: CREDENTIALS_SERVICE_CONTEXT
+  valueFrom:
+    secretKeyRef:
+      name: aws-secrets
+      key: CREDENTIALS_SERVICE_CONTEXT
+- name: CREDENTIALS_CLIENT_IDS
+  valueFrom:
+    secretKeyRef:
+      name: aws-secrets
+      key: CREDENTIALS_CLIENT_IDS
+{{- end }}
