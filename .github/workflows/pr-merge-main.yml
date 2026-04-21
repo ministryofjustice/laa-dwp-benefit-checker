@@ -21,7 +21,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Build and test
         run: ./gradlew build
@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew integrationTest --tests '*IntegrationTest'
 
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: bc-service/build/test-results
@@ -43,7 +43,7 @@ jobs:
 
       - name: Upload checkstyle report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: checkstyle-report
           path: bc-service/build/reports/checkstyle
@@ -51,7 +51,7 @@ jobs:
 
       - name: Upload test report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: test-report
           path: bc-service/build/reports/tests
@@ -59,7 +59,7 @@ jobs:
 
       - name: Upload jacoco coverage report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jacoco-coverage-report
           path: bc-service/build/reports/jacoco
@@ -118,7 +118,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Deploy UAT branch
         id: deploy_uat_branch
@@ -146,7 +146,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Deploy production
         id: deploy_prod_branch
