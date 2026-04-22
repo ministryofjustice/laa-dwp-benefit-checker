@@ -112,6 +112,7 @@ jobs:
 
   sast:
     name: sast
+    needs: application-image-build
     uses: ministryofjustice/laa-reusable-github-actions/.github/workflows/sast.yml@a652d1076b05dd80d3ab619d263aac6ce526d70b
     permissions:
       actions: read
