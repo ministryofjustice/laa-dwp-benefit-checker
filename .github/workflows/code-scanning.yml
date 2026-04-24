@@ -123,3 +123,4 @@ jobs:
       image_uri: ${{ needs.application-image-build.outputs.ecr-image }}
     secrets:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      ECR_ROLE_TO_ASSUME: ${{ secrets.ECR_ROLE_TO_ASSUME }}
