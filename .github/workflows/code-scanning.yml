@@ -75,6 +75,8 @@ jobs:
   application-image-build:
     name: application-image-build
     runs-on: ubuntu-latest
+    outputs:
+      image_uri: ${{ steps.build-and-push-image.outputs.image_uri }}
     permissions:
       id-token: write
     steps:
