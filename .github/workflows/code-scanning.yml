@@ -105,7 +105,7 @@ jobs:
           docker tag laa-benefit-checker-interim $REGISTRY/$REPOSITORY:$GITHUB_TAG
           echo "Pushing the Docker image to $REGISTRY/$REPOSITORY:$GITHUB_TAG"
           docker push $REGISTRY/$REPOSITORY:$GITHUB_TAG
-          echo "{ecr-image}={$REGISTRY/$REPOSITORY:$GITHUB_TAG}" >> $GITHUB_OUTPUT
+          echo "image_uri=$REGISTRY/$REPOSITORY:$GITHUB_TAG" >> $GITHUB_OUTPUT
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ vars.ECR_REPOSITORY }}
